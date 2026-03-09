@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安心檢驗報告 - Pawi 派怡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.png" alt="Pawi" class="brand-logo"></a>
+            </div>
+        
+            <button class="menu-toggle" id="menuToggle" aria-label="切換選單">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="index.html">首頁</a></li>
+                    <li><a href="about.html">關於派怡</a></li>
+                    <li><a href="index.html#products">營養品系列</a></li>
+                    <li><a href="news.html">最新消息</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <section class="page-header" style="background: #FFF9F2; padding: 60px 0; text-align: center;">
+        <div class="container">
+            <h1 style="color: var(--primary-orange);"><i class="fas fa-clipboard-check"></i> 安心檢驗報告</h1>
+            <p>每一批產品皆經過嚴格把關，給毛孩最透明的守護</p>
+        </div>
+    </section>
+
+    <main class="container" style="padding: 60px 20px;">
+        <div class="report-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            
+            <div class="report-card" style="background: #fff; padding: 30px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); text-align: center;">
+                <div style="font-size: 3rem; color: var(--primary-orange); margin-bottom: 20px;"><i class="fas fa-file-pdf"></i></div>
+                <h3>犬用關節加強粉</h3>
+                <p style="color: #999; margin-bottom: 20px;">檢驗項目：重金屬、微生物、農藥殘留</p>
+                <a href="#" class="btn-primary" style="padding: 10px 30px; font-size: 0.9rem;">下載完整報告</a>
+            </div>
+
+            <div class="report-card" style="background: #fff; padding: 30px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); text-align: center;">
+                <div style="font-size: 3rem; color: var(--primary-orange); margin-bottom: 20px;"><i class="fas fa-file-pdf"></i></div>
+                <h3>貓用天然排毛粉</h3>
+                <p style="color: #999; margin-bottom: 20px;">檢驗項目：重金屬、微生物、塑化劑</p>
+                <a href="#" class="btn-primary" style="padding: 10px 30px; font-size: 0.9rem;">下載完整報告</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer style="background: #5A4B40;">...</footer>
+    <script src="js/main.js"></script>
+</body>
+</html>
