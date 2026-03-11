@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <link rel="icon" type="image/png" href="../my-favicon/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="../my-favicon/favicon.svg">
+    <link rel="shortcut icon" href="../my-favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../my-favicon/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Molos 毛樂適">
+    <link rel="manifest" href="../my-favicon/site.webmanifest">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵活力 - Molos 毛樂適</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html"><img src="../images/logo.png" alt="Molos 毛樂適" class="brand-logo"></a>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="切換選單">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-right">
+                <nav class="nav-menu" id="navMenu">
+                    <ul>
+                        <li><a href="../index.html">首頁</a></li>
+                        <li><a href="../about.html">關於毛樂適</a></li>
+                        <li><a href="../index.html#products">營養品系列</a></li>
+                        <li><a href="../news/index.html">最新消息</a></li>
+                    </ul>
+                </nav>
+                <button class="nav-cart-btn" id="navCartBtn" aria-label="購物車">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="navCartBadge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <div class="container" style="padding:20px 20px 0;">
+        <nav class="breadcrumb">
+            <a href="../index.html">首頁</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="../index.html#products">營養品系列</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>寵活力</span>
+        </nav>
+    </div>
+
+    <main class="container" style="padding:30px 20px 80px;">
+        <div style="display:flex; flex-wrap:wrap; gap:50px; align-items:flex-start;">
+            <!-- 圖片 -->
+            <div style="flex:1; min-width:280px;">
+                <div style="background:#fff; border-radius:40px; box-shadow:0 10px 30px rgba(0,0,0,0.06); padding:40px; text-align:center;">
+                    <img src="../images/products/vitality.png" alt="寵活力" style="width:100%; max-width:360px; height:auto;">
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; justify-content:center;">
+                    <span style="background:#FF9D42;color:#fff;padding:4px 14px;border-radius:20px;font-size:0.85rem;">犬貓皆適用</span>
+                    <span style="background:#FFF9F2;color:#5A4B40;padding:4px 14px;border-radius:20px;font-size:0.85rem;border:1px solid #FFD28D;">熟齡毛孩首選</span>
+                    <span style="background:#FFF9F2;color:#5A4B40;padding:4px 14px;border-radius:20px;font-size:0.85rem;border:1px solid #FFD28D;">SGS 檢驗合格</span>
+                </div>
+            </div>
+            <!-- 購買資訊 -->
+            <div style="flex:1; min-width:280px;">
+                <span class="badge" style="background:#FF9D42;color:#fff;padding:5px 15px;border-radius:20px;">元氣 · 活力</span>
+                <h1 style="font-size:2rem;margin:15px 0;color:var(--text-dark);">寵活力
+                    <small style="display:block;font-size:1rem;color:#8D7E71;font-weight:normal;margin-top:4px;">全方位配方 ｜ 高純度綜合營養補充</small>
+                </h1>
+                <p style="color:#666;font-size:1.05rem;margin-bottom:25px;line-height:1.8;">專為體力下降、食慾不振或進入熟齡階段的毛孩設計。高純度 CoQ10 輔酶、B 群維生素與天然植萃能量素，快速補充消耗的活力，讓熟齡毛孩重拾年輕朝氣。</p>
+                <div style="margin-bottom:25px;">
+                    <span style="font-size:2.2rem;color:var(--primary-orange);font-weight:bold;">NT$ 720</span>
+                </div>
+                <ul style="list-style:none;padding:0;margin-bottom:30px;line-height:2.2;">
+                    <li><i class="fas fa-check-circle" style="color:var(--primary-orange);margin-right:8px;"></i>高純度 CoQ10 輔酶，心臟與細胞能量供給</li>
+                    <li><i class="fas fa-check-circle" style="color:var(--primary-orange);margin-right:8px;"></i>全系列 B 群維生素，神經與代謝全面支援</li>
+                    <li><i class="fas fa-check-circle" style="color:var(--primary-orange);margin-right:8px;"></i>天然植萃能量素，抗氧化延緩老化</li>
+                    <li><i class="fas fa-check-circle" style="color:var(--primary-orange);margin-right:8px;"></i>7 歲以上熟齡犬貓尤其推薦</li>
+                </ul>
+                <div class="quantity-cart-row">
+                    <input type="number" value="1" min="1" id="qty-vitality">
+                    <button class="btn-primary btn-add-cart" style="flex:1;"
+                        data-id="vitality"
+                        data-name="寵活力（全方位配方）"
+                        data-price="720"
+                        data-img="../images/products/vitality.png"
+                        data-qty-input="qty-vitality">
+                        <i class="fas fa-shopping-cart" style="margin-right:8px;"></i>加入購物車
+                    </button>
+                </div>
+                <p style="color:#aaa;font-size:0.85rem;margin-top:12px;text-align:center;"><i class="fas fa-truck" style="margin-right:5px;"></i>滿 NT$1,000 免運費</p>
+            </div>
+        </div>
+
+        <hr style="border:0;border-top:1px solid #eee;margin:60px 0;">
+
+        <section class="product-info-tabs">
+            <div class="tab-header">
+                <button class="tab-btn active" onclick="openTab(event,'tab1')">產品特色</button>
+                <button class="tab-btn" onclick="openTab(event,'tab2')">食用建議</button>
+                <button class="tab-btn" onclick="openTab(event,'tab3')">檢驗報告</button>
+            </div>
+
+            <div id="tab1" class="tab-content active">
+                <div class="feature-detail-grid" style="margin-top:20px;">
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="../images/icons/feat-patent.png" alt="CoQ10"></div>
+                        <div class="feature-info"><h4>高純度 CoQ10</h4><p>輔酶 Q10 是細胞粒線體的核心能量分子，提升心臟功能與全身細胞活力，熟齡毛孩補充特別有感。</p></div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="../images/icons/feat-digest.png" alt="B群"></div>
+                        <div class="feature-info"><h4>全系列 B 群維生素</h4><p>B1、B2、B6、B12 全面補充，維持神經傳導正常運作，改善情緒低落與食慾不振。</p></div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="../images/icons/feat-natural.png" alt="植萃"></div>
+                        <div class="feature-info"><h4>天然植萃抗氧化</h4><p>精選薑黃、迷迭香萃取物，清除體內自由基，延緩細胞老化，從根本改善熟齡毛孩的活力。</p></div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="../images/icons/feat-natural.png" alt="全齡"></div>
+                        <div class="feature-info"><h4>術後恢復也適用</h4><p>手術後或生病恢復期間的毛孩，特別需要快速補充能量，寵活力是絕佳的術後輔助補給。</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab2" class="tab-content">
+                <div class="feeding-guide-container">
+                    <div class="method-steps">
+                        <div class="step-item">
+                            <div class="step-icon-bg"><img src="../images/icons/feed-dry.png" alt="拌乾糧"></div>
+                            <h4>拌入乾糧</h4><p>直接撒在飼料表面</p>
+                        </div>
+                        <div class="step-arrow"><i class="fas fa-plus"></i></div>
+                        <div class="step-item">
+                            <div class="step-icon-bg"><img src="../images/icons/feed-wet.png" alt="混濕食"></div>
+                            <h4>混合濕食</h4><p>加入罐頭或鮮食中</p>
+                        </div>
+                        <div class="step-arrow"><i class="fas fa-plus"></i></div>
+                        <div class="step-item">
+                            <div class="step-icon-bg"><img src="../images/icons/feed-direct.png" alt="直接餵"></div>
+                            <h4>直接餵食</h4><p>天然香氣，毛孩愛吃</p>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="pawi-table">
+                            <thead><tr><th>毛孩體重</th><th>日常補充（每日）</th><th>活力加強（每日）</th></tr></thead>
+                            <tbody>
+                                <tr><td>5 kg 以下</td><td><span class="qty-pill">0.5 包</span></td><td><span class="qty-pill orange">1 包</span></td></tr>
+                                <tr><td>5 — 15 kg</td><td><span class="qty-pill">1 包</span></td><td><span class="qty-pill orange">1.5 包</span></td></tr>
+                                <tr><td>15 kg 以上</td><td><span class="qty-pill">1.5 包</span></td><td><span class="qty-pill orange">2 包</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="feeding-notice-box">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>毛樂適小筆記：</strong>7 歲以上熟齡毛孩建議長期使用日常補充劑量；術後或體力明顯下降時可暫時提高至活力加強劑量，2–4 週後評估狀況。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab3" class="tab-content">
+                <div class="report-summary-box">
+                    <div class="report-visual" style="display:flex;gap:25px;flex-wrap:wrap;">
+                        <div class="safety-item"><div class="safety-icon"><i class="fas fa-shield-alt"></i></div><span>重金屬合格</span></div>
+                        <div class="safety-item"><div class="safety-icon"><i class="fas fa-vial"></i></div><span>無農藥殘留</span></div>
+                        <div class="safety-item"><div class="safety-icon"><i class="fas fa-microbe"></i></div><span>微生物正常</span></div>
+                    </div>
+                    <div class="report-main-box">
+                        <div class="report-gallery-wall">
+                            <div class="report-preview-card" onclick="openLightbox('../images/reports/report-sgs-01.jpg','SGS 重金屬檢驗報告')">
+                                <img src="../images/reports/report-sgs-01.jpg" alt="SGS 報告"><div class="preview-overlay"><i class="fas fa-search-plus"></i></div>
+                            </div>
+                            <div class="report-preview-card" onclick="openLightbox('../images/reports/report-sgs-02.jpg','SGS 農藥殘留報告')">
+                                <img src="../images/reports/report-sgs-02.jpg" alt="SGS 報告"><div class="preview-overlay"><i class="fas fa-search-plus"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="pawiLightbox" class="modal" onclick="closeLightbox()">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="lightboxImg" src="" alt="">
+        <p id="modalCaption"></p>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-col">
+                <h3>Molos 毛樂適</h3>
+                <p>專業研發犬貓保健食品，堅持天然無添加，用最純粹的營養守護毛孩的健康與快樂。</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>快速導覽</h4>
+                <ul>
+                    <li><a href="../about.html">關於我們</a></li>
+                    <li><a href="../index.html#products">產品清單</a></li>
+                    <li><a href="../news/index.html">衛教知識</a></li>
+                    <li><a href="../report.html">安心報告</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>聯絡我們</h4>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:service@molos.com.tw">service@molos.com.tw</a></p>
+                <p><i class="fas fa-phone"></i> 02-1234-5678</p>
+            </div>
+        </div>
+        <div class="footer-copy">&copy; 2026 Molos 毛樂適寵物營養專家 版權所有</div>
+    </footer>
+
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> 購物車</h3>
+            <button class="cart-close" id="cartClose" aria-label="關閉購物車"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <div class="cart-empty" id="cartEmpty"><i class="fas fa-box-open"></i><p>購物車是空的</p></div>
+            <ul class="cart-item-list" id="cartItemList"></ul>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display:none;">
+            <div class="cart-total"><span>合計</span><span class="cart-total-price" id="cartTotalPrice">NT$ 0</span></div>
+            <button class="btn-primary cart-checkout-btn"><i class="fas fa-lock" style="margin-right:8px;"></i>前往結帳</button>
+        </div>
+    </aside>
+    <script src="../js/main.js"></script>
+</body>
+</html>
