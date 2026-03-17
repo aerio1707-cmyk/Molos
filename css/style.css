@@ -1505,7 +1505,8 @@ body.menu-open {
     .nav-member-btn { padding: 6px; }
     .nav-dropdown { right: -8px; }
     .hero-overlay h1 { font-size: 1.8rem; }
-    .section-header h2 { font-size: 1.2rem; }
+    .section-header h2 { font-size: 1.6rem; }
+    .section-header p { font-size: 0.9rem; }
 }
 
 
