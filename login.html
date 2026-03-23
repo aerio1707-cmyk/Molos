@@ -506,13 +506,29 @@
         </div>
     </div>
 
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/main.js"></script>
     <script>
-    /* ── login.html 專屬互動邏輯 ── */
+    /* ============================================================
+       login.html 專屬互動邏輯 — 真實 Supabase 連線版
+       ============================================================ */
+
+    /* ── Supabase 初始化 ── */
+    const SUPABASE_URL  = 'https://rlmnjvcppucaehgxlmim.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsbW5qdmNwcHVjYWVoZ3hsbWltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MjAxNTgsImV4cCI6MjA4OTI5NjE1OH0.sPGXNrIdILGNmEbBf5v5IU1tBvZ1ySD0-0TLX-YYmIc';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
     var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    /* 頁籤切換 */
+    /* ── 頁面載入：若已登入直接跳轉 ── */
+    _supabase.auth.getSession().then(function(res) {
+        if (res.data.session) {
+            window.location.href = 'member.html';
+        }
+    });
+
+    /* ── 頁籤切換 ── */
     document.querySelectorAll('.auth-tab').forEach(function(tab) {
         tab.addEventListener('click', function() {
             document.querySelectorAll('.auth-tab').forEach(function(t){ t.classList.remove('active'); });
@@ -522,7 +538,7 @@
         });
     });
 
-    /* 顯示/隱藏密碼 */
+    /* ── 顯示/隱藏密碼 ── */
     document.querySelectorAll('.toggle-pw').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var input = document.getElementById(btn.dataset.target);
@@ -537,7 +553,52 @@
         });
     });
 
-    /* 忘記密碼彈窗 */
+    /* ── 共用：設定按鈕 Loading 狀態 ── */
+    function setBtnLoading(btnId, text) {
+        var btn = document.getElementById(btnId);
+        btn.disabled = true;
+        btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;"></span>' + text;
+    }
+    function resetBtn(btnId, html) {
+        var btn = document.getElementById(btnId);
+        btn.disabled = false;
+        btn.innerHTML = html;
+    }
+
+    /* ── 共用：顯示錯誤訊息 ── */
+    function showAuthError(containerId, msg) {
+        var el = document.getElementById(containerId);
+        if (!el) {
+            // 動態建立錯誤訊息區塊
+            el = document.createElement('p');
+            el.id = containerId;
+            el.style.cssText = 'color:#e74c3c;font-size:0.85rem;text-align:center;margin-top:12px;';
+            document.getElementById(btnId).parentNode.appendChild(el);
+        }
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+
+    /* ── Google 登入（真實 OAuth）── */
+    function handleSocialLogin(provider) {
+        if (provider === 'Google') {
+            _supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: window.location.origin + '/member.html' }
+            });
+        } else {
+            /* Facebook / LINE 尚未設定，顯示提示 */
+            document.getElementById('social-modal-title').textContent = provider + ' 登入';
+            document.getElementById('social-modal-desc').textContent =
+                provider + ' 登入尚未開放，敬請期待！';
+            document.getElementById('social-modal').classList.add('show');
+        }
+    }
+    document.getElementById('social-close').addEventListener('click', function() {
+        document.getElementById('social-modal').classList.remove('show');
+    });
+
+    /* ── 忘記密碼彈窗 ── */
     document.getElementById('forgot-link').addEventListener('click', function(e) {
         e.preventDefault();
         document.getElementById('forgot-modal').classList.add('show');
@@ -545,50 +606,40 @@
     document.getElementById('forgot-close').addEventListener('click', function() {
         document.getElementById('forgot-modal').classList.remove('show');
     });
-    document.getElementById('btn-forgot-send').addEventListener('click', function() {
+    document.getElementById('btn-forgot-send').addEventListener('click', async function() {
         var email = document.getElementById('forgot-email').value.trim();
         if (!EMAIL_RE.test(email)) {
             document.getElementById('forgot-email').classList.add('is-error');
             return;
         }
-        /* Demo：假裝寄送成功 */
-        document.querySelector('#forgot-modal .modal-box-inner').innerHTML =
-            '<div class="modal-icon" style="background:#eafaf1;"><i class="fas fa-check" style="color:#27ae60;"></i></div>' +
-            '<h3>已寄出！</h3>' +
-            '<p>請至 <strong>' + email + '</strong><br>收取密碼重設信件。</p>' +
-            '<button class="btn-auth" style="background:#27ae60;" onclick="document.getElementById(\'forgot-modal\').classList.remove(\'show\')">' +
-            '<i class="fas fa-check" style="margin-right:8px;"></i>確認</button>';
+        var btn = document.getElementById('btn-forgot-send');
+        btn.disabled = true;
+        btn.textContent = '寄送中…';
+
+        var { error } = await _supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/reset-password.html'
+        });
+
+        if (error) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i>重新寄送';
+            alert('寄送失敗：' + error.message);
+        } else {
+            document.querySelector('#forgot-modal .modal-box-inner').innerHTML =
+                '<div class="modal-icon" style="background:#eafaf1;"><i class="fas fa-check" style="color:#27ae60;"></i></div>' +
+                '<h3>已寄出！</h3>' +
+                '<p>請至 <strong>' + email + '</strong><br>收取密碼重設信件。</p>' +
+                '<button class="btn-auth" style="background:#27ae60;" onclick="document.getElementById(\'forgot-modal\').classList.remove(\'show\')">' +
+                '<i class="fas fa-check" style="margin-right:8px;"></i>確認</button>';
+        }
     });
 
-    /* 社群登入 Demo */
-    function handleSocialLogin(provider) {
-        document.getElementById('social-modal-title').textContent = provider + ' 登入';
-        document.getElementById('social-modal-desc').textContent =
-            '實際部署時將跳轉至 ' + provider + ' 授權頁面。\n目前為 UI 展示模式。';
-        document.getElementById('social-modal').classList.add('show');
-    }
-    document.getElementById('social-close').addEventListener('click', function() {
-        document.getElementById('social-modal').classList.remove('show');
-    });
-
-    /* Demo 登入（模擬成功） */
-    function demoLogin() {
-        var mockUser = {
-            name:   'Demo 會員',
-            email:  'demo@molos.com.tw',
-            avatar: '',
-            via:    'demo'
-        };
-        MolosAuth.login(mockUser);
-        window.location.href = 'member.html';
-    }
-
-    /* ── Email 登入表單 ── */
-    document.getElementById('login-form').addEventListener('submit', function(e) {
+    /* ── Email 登入表單（真實驗證）── */
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         var email = document.getElementById('login-email').value.trim();
         var pw    = document.getElementById('login-pw').value;
-        var ok = true;
+        var ok    = true;
 
         if (!EMAIL_RE.test(email)) {
             document.getElementById('login-email').classList.add('is-error');
@@ -608,27 +659,39 @@
         }
         if (!ok) return;
 
-        /* Demo：直接登入成功 */
-        var btn = document.getElementById('btn-login');
-        btn.disabled = true;
-        btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;"></span>登入中…';
+        setBtnLoading('btn-login', '登入中…');
 
-        setTimeout(function() {
-            var name = email.split('@')[0];
-            MolosAuth.login({ name: name, email: email, avatar: '', via: 'email' });
+        var { data, error } = await _supabase.auth.signInWithPassword({ email, password: pw });
+
+        if (error) {
+            resetBtn('btn-login', '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>登入');
+            var errMsg = '登入失敗，請檢查帳號或密碼';
+            if (error.message.includes('Email not confirmed')) errMsg = '請先至信箱驗證您的 Email';
+            document.getElementById('err-login-pw').textContent = errMsg;
+            document.getElementById('err-login-pw').classList.add('show');
+        } else {
+            /* 登入成功：更新 MolosAuth 並跳轉 */
+            var user = data.user;
+            MolosAuth.login({
+                name:   user.user_metadata.full_name || user.user_metadata.name || email.split('@')[0],
+                email:  user.email,
+                avatar: user.user_metadata.avatar_url || '',
+                via:    'email',
+                id:     user.id
+            });
             window.location.href = 'member.html';
-        }, 1000);
+        }
     });
 
-    /* ── Email 註冊表單 ── */
-    document.getElementById('register-form').addEventListener('submit', function(e) {
+    /* ── Email 註冊表單（真實建立帳號）── */
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         var name  = document.getElementById('reg-name').value.trim();
         var email = document.getElementById('reg-email').value.trim();
         var pw    = document.getElementById('reg-pw').value;
         var pw2   = document.getElementById('reg-pw2').value;
         var terms = document.getElementById('agree-terms').checked;
-        var ok = true;
+        var ok    = true;
 
         function setErr(inputId, errId, cond) {
             document.getElementById(inputId).classList.toggle('is-error', !cond);
@@ -642,25 +705,42 @@
         setErr('reg-pw2',   'err-reg-pw2',   pw2 === pw && pw2 !== '');
         document.getElementById('err-terms').classList.toggle('show', !terms);
         if (!terms) ok = false;
-
         if (!ok) return;
 
-        var btn = document.getElementById('btn-register');
-        btn.disabled = true;
-        btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;"></span>建立帳號中…';
+        setBtnLoading('btn-register', '建立帳號中…');
 
-        setTimeout(function() {
-            MolosAuth.login({ name: name, email: email, avatar: '', via: 'email' });
-            window.location.href = 'member.html';
-        }, 1000);
+        var { data, error } = await _supabase.auth.signUp({
+            email,
+            password: pw,
+            options: { data: { full_name: name } }
+        });
+
+        if (error) {
+            resetBtn('btn-register', '<i class="fas fa-user-plus" style="margin-right:8px;"></i>立即註冊');
+            var errMsg = '註冊失敗：' + error.message;
+            if (error.message.includes('already registered')) errMsg = '此 Email 已被註冊，請直接登入';
+            document.getElementById('err-reg-email').textContent = errMsg;
+            document.getElementById('err-reg-email').classList.add('show');
+        } else {
+            /* 註冊成功：提示驗證信 */
+            document.getElementById('register-form').innerHTML =
+                '<div style="text-align:center;padding:20px 0;">' +
+                '<div style="width:64px;height:64px;background:#eafaf1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">' +
+                '<i class="fas fa-envelope-open-text" style="font-size:1.8rem;color:#27ae60;"></i></div>' +
+                '<h3 style="color:#333;margin-bottom:8px;">驗證信已寄出！</h3>' +
+                '<p style="color:#999;font-size:0.9rem;line-height:1.6;">請至 <strong style="color:#333;">' + email + '</strong><br>點擊信件中的連結完成驗證，<br>即可開始使用會員功能。</p>' +
+                '<button class="btn-auth" style="margin-top:20px;" onclick="document.querySelector(\'[data-target=panel-login]\').click()">' +
+                '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>前往登入</button></div>';
+        }
     });
 
-    /* 點彈窗背景關閉 */
+    /* ── 點彈窗背景關閉 ── */
     ['forgot-modal','social-modal'].forEach(function(id) {
         document.getElementById(id).addEventListener('click', function(e) {
             if (e.target === this) this.classList.remove('show');
         });
     });
+
     </script>
 </body>
 </html>
