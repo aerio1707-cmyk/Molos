@@ -664,11 +664,16 @@
         var { data, error } = await _supabase.auth.signInWithPassword({ email, password: pw });
 
         if (error) {
-            resetBtn('btn-login', '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>登入');
-            var errMsg = '登入失敗，請檢查帳號或密碼';
-            if (error.message.includes('Email not confirmed')) errMsg = '請先至信箱驗證您的 Email';
-            document.getElementById('err-login-pw').textContent = errMsg;
-            document.getElementById('err-login-pw').classList.add('show');
+                resetBtn('btn-login', '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>登入');
+                   var errMsg = '登入失敗，請檢查帳號或密碼';
+                if (error.message.includes('Email not confirmed')) errMsg = '請先至信箱驗證您的 Email';
+                   document.getElementById('err-login-pw').textContent = errMsg;
+                   document.getElementById('err-login-pw').classList.add('show');
+        } else if (!data.user.email_confirmed_at) {
+                resetBtn('btn-login', '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>登入');
+                await _supabase.auth.signOut();
+                   document.getElementById('err-login-pw').textContent = '請先至信箱完成 Email 驗證後再登入';
+                   document.getElementById('err-login-pw').classList.add('show');
         } else {
             /* 登入成功：更新 MolosAuth 並跳轉 */
             var user = data.user;
