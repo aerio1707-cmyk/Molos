@@ -883,21 +883,15 @@
             data: { full_name: name }
         });
 
-        // 更新 profiles 資料表（使用 UPDATE，確保不觸發 RLS 衝突）
+        // 更新 profiles 資料表
         const { error: profileErr } = await _supabase
             .from('profiles')
-            .update({
-                full_name: name,
-                phone: phone || null,
-                birthday: birthday || null,
-                updated_at: new Date().toISOString()
-            })
-            .eq('id', currentUser.id);
+            .upsert({ id: currentUser.id, phone, birthday, updated_at: new Date().toISOString() });
 
         resetBtn(this, '<i class="fas fa-save" style="margin-right:6px;"></i>儲存變更');
 
         if (metaErr || profileErr) {
-            showAlert('profile-error', 'profile-error-msg', '儲存失敗：' + (profileErr ? profileErr.message : metaErr.message));
+            showAlert('profile-error', 'profile-error-msg', '儲存失敗，請稍後再試');
         } else {
             document.getElementById('sidebarName').textContent = name;
             document.getElementById('sidebarInitial').textContent = name.charAt(0).toUpperCase();
