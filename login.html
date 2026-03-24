@@ -491,16 +491,16 @@
         </div>
     </div>
 
-    <!-- 社群登入提示彈窗（UI Demo） -->
+    <!-- 社群登入提示彈窗（Facebook / LINE 尚未開放） -->
     <div class="modal-backdrop" id="social-modal">
         <div class="modal-box">
             <div class="modal-box-inner">
                 <button class="modal-close-btn" id="social-close"><i class="fas fa-times"></i></button>
-                <div class="modal-icon"><i class="fas fa-plug"></i></div>
-                <h3 id="social-modal-title">社群登入</h3>
-                <p id="social-modal-desc">此功能串接後端後即可使用。<br>目前為 UI 展示模式。</p>
-                <button class="btn-auth" onclick="demoLogin()">
-                    <i class="fas fa-flask" style="margin-right:8px;"></i>體驗 Demo 登入
+                <div class="modal-icon"><i class="fas fa-clock"></i></div>
+                <h3 id="social-modal-title">敬請期待</h3>
+                <p id="social-modal-desc">此登入方式即將開放，<br>請先使用 Email 或 Google 登入。</p>
+                <button class="btn-auth" onclick="document.getElementById('social-modal').classList.remove('show')">
+                    <i class="fas fa-times" style="margin-right:8px;"></i>關閉
                 </button>
             </div>
         </div>
@@ -727,13 +727,14 @@
             document.getElementById('err-reg-email').textContent = errMsg;
             document.getElementById('err-reg-email').classList.add('show');
         } else {
-            /* 註冊成功：提示驗證信 */
+            /* 註冊成功：強制登出（避免未驗證就進入會員頁），並顯示提示 */
+            await _supabase.auth.signOut();
             document.getElementById('register-form').innerHTML =
                 '<div style="text-align:center;padding:20px 0;">' +
                 '<div style="width:64px;height:64px;background:#eafaf1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">' +
                 '<i class="fas fa-envelope-open-text" style="font-size:1.8rem;color:#27ae60;"></i></div>' +
                 '<h3 style="color:#333;margin-bottom:8px;">驗證信已寄出！</h3>' +
-                '<p style="color:#999;font-size:0.9rem;line-height:1.6;">請至 <strong style="color:#333;">' + email + '</strong><br>點擊信件中的連結完成驗證，<br>即可開始使用會員功能。</p>' +
+                '<p style="color:#999;font-size:0.9rem;line-height:1.6;">請至 <strong style="color:#333;">' + email + '</strong><br>點擊信件中的連結完成驗證，<br>驗證完成後即可登入使用會員功能。</p>' +
                 '<button class="btn-auth" style="margin-top:20px;" onclick="document.querySelector(\'[data-target=panel-login]\').click()">' +
                 '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>前往登入</button></div>';
         }
