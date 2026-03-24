@@ -584,7 +584,10 @@
         if (provider === 'Google') {
             _supabase.auth.signInWithOAuth({
                 provider: 'google',
-                options: { redirectTo: window.location.origin + '/member.html' }
+                options: {
+                    redirectTo: window.location.origin + '/member.html',
+                    queryParams: { prompt: 'select_account' }  // 每次都顯示帳號選擇畫面
+                }
             });
         } else {
             /* Facebook / LINE 尚未設定，顯示提示 */
