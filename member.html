@@ -818,6 +818,51 @@
 
         // 更新 MolosAuth
         MolosAuth.login({ name, email, avatar: meta.avatar_url || '', via: 'supabase', id: user.id });
+
+        // 強制重新渲染 Navbar 會員入口
+        var navRight = document.querySelector('.nav-right');
+        if (navRight) {
+            var oldLoginBtn = navRight.querySelector('.nav-login-btn');
+            if (oldLoginBtn) oldLoginBtn.remove();
+            var oldMemberBtn = navRight.querySelector('.nav-member');
+            if (oldMemberBtn) oldMemberBtn.remove();
+
+            var initial2 = name.charAt(0).toUpperCase();
+            var memberBtn2 = document.createElement('div');
+            memberBtn2.className = 'nav-member';
+            memberBtn2.innerHTML =
+                '<button class="nav-member-btn" id="navMemberBtn2" aria-expanded="false">' +
+                (meta.avatar_url
+                    ? '<img src="' + meta.avatar_url + '" alt="頭像" class="nav-avatar-img">'
+                    : '<span class="nav-avatar-initial">' + initial2 + '</span>'
+                ) +
+                '<span class="nav-member-name">' + name + '</span>' +
+                '<i class="fas fa-chevron-down nav-member-caret"></i>' +
+                '</button>' +
+                '<div class="nav-dropdown" id="navDropdown2">' +
+                '<a href="member.html" class="nav-dd-item"><i class="fas fa-user-edit"></i> 個人資料</a>' +
+                '<a href="member.html#orders" class="nav-dd-item"><i class="fas fa-box"></i> 訂單查詢</a>' +
+                '<div class="nav-dd-divider"></div>' +
+                '<button class="nav-dd-item nav-dd-logout" id="navLogout2"><i class="fas fa-sign-out-alt"></i> 登出</button>' +
+                '</div>';
+            navRight.insertBefore(memberBtn2, navRight.querySelector('.nav-cart-btn'));
+
+            var mbEl = document.getElementById('navMemberBtn2');
+            var ddEl = document.getElementById('navDropdown2');
+            mbEl.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var isOpen = ddEl.classList.toggle('open');
+                mbEl.setAttribute('aria-expanded', isOpen);
+            });
+            document.addEventListener('click', function() {
+                ddEl.classList.remove('open');
+            });
+            document.getElementById('navLogout2').addEventListener('click', async function() {
+                await _supabase.auth.signOut();
+                MolosAuth.logout();
+                window.location.href = 'index.html';
+            });
+        }
     }
 
     /* ── 儲存個人資料 ── */
