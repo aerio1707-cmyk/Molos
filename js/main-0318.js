@@ -51,24 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.nav-menu a').forEach(function (link) {
         link.addEventListener('click', function () {
             if (navMenu && navMenu.classList.contains('active')) {
-                // 手機版：點子選單連結時才關閉，點父項時展開子選單
-                var parentLi = link.closest('.nav-dropdown-parent');
-                if (!parentLi) toggleMenu();
+                toggleMenu();
             }
-        });
-    });
-
-    /* ── 手機版：毛樂適系列 點擊展開子選單 ── */
-    document.querySelectorAll('.nav-dropdown-parent').forEach(function(parent) {
-        var parentLink = parent.querySelector('.nav-has-dropdown');
-        if (!parentLink) return;
-        parentLink.addEventListener('click', function(e) {
-            // 桌機版不攔截（直接跳轉）
-            if (window.innerWidth > 768) return;
-            e.preventDefault();
-            parent.classList.toggle('open');
-            var caret = parentLink.querySelector('.nav-dropdown-caret');
-            if (caret) caret.style.transform = parent.classList.contains('open') ? 'rotate(180deg)' : '';
         });
     });
 
