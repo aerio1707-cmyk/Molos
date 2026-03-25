@@ -28,7 +28,15 @@
                     <ul>
                         <li><a href="../index.html">首頁</a></li>
                         <li><a href="../about.html">關於毛樂適</a></li>
-                        <li><a href="../index.html#products">毛樂適系列</a></li>
+                        <li class="nav-dropdown-parent">
+                            <a href="../products/index.html" class="nav-has-dropdown">
+                                毛樂適系列 <i class="fas fa-chevron-down nav-dropdown-caret"></i>
+                            </a>
+                            <ul class="nav-sub-menu">
+                                <li><a href="../products/index.html#low-allergen">低敏肉泥系列</a></li>
+                                <li><a href="../products/index.html#supplements">營養品系列</a></li>
+                            </ul>
+                        </li>
                         <li><a href="../news/index.html">最新消息</a></li>
                     </ul>
                 </nav>
@@ -45,7 +53,7 @@
         <nav class="breadcrumb">
             <a href="../index.html">首頁</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="../index.html#products">低敏肉泥系列</a>
+            <a href="../products/index.html#low-allergen">低敏肉泥系列</a>
             <i class="fas fa-chevron-right"></i>
             <span>免疫盾</span>
         </nav>
@@ -202,14 +210,14 @@
                 <h4>快速導覽</h4>
                 <ul>
                     <li><a href="../about.html">關於我們</a></li>
-                    <li><a href="../index.html#products">產品清單</a></li>
+                    <li><a href="../products/index.html">產品系列</a></li>
                     <li><a href="../news/index.html">衛教知識</a></li>
                     <li><a href="../report.html">安心報告</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>聯絡我們</h4>
-                <p><i class="fas fa-envelope"></i> <a href="mailto:service@molos.com.tw">service@molos.com.tw</a></p>
+                <p><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#c4b7a1b6b2ada7a184a9aba8abb7eaa7aba9eab0b3"><span class="__cf_email__" data-cfemail="7d0e180f0b141e183d101211120e531e121053090a">[email&#160;protected]</span></a></p>
                 <p><i class="fas fa-phone"></i> 02-1234-5678</p>
             </div>
         </div>
@@ -228,9 +236,4 @@
         </div>
         <div class="cart-footer" id="cartFooter" style="display:none;">
             <div class="cart-total"><span>合計</span><span class="cart-total-price" id="cartTotalPrice">NT$ 0</span></div>
-            <button class="btn-primary cart-checkout-btn"><i class="fas fa-lock" style="margin-right:8px;"></i>前往結帳</button>
-        </div>
-    </aside>
-    <script src="../js/main.js"></script>
-</body>
-</html>
+            <button class="btn-primary cart-checkout-btn"><i class="fas fa-lock" style="
