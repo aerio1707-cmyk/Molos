@@ -498,7 +498,7 @@
                             </button>
                             <div id="send-error-vet">
                                 <i class="fas fa-exclamation-triangle" style="margin-right:6px;"></i>
-                                訊息傳送失敗，請稍後再試或直接寄信至 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fb889e898d92989ebb9694979488d5989496d58f8c">[email&#160;protected]</a>
+                                訊息傳送失敗，請稍後再試或直接寄信至 <a href="mailto:service@molos.com.tw">service@molos.com.tw</a>
                             </div>
                         </form>
 
@@ -554,109 +554,15 @@
             </div>
             <div class="footer-col">
                 <h4>聯絡我們</h4>
-                <p><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#582b3d2a2e313b3d18353734372b763b3735762c2f"><span class="__cf_email__" data-cfemail="a7d4c2d5d1cec4c2e7cac8cbc8d489c4c8ca89d3d0">[email&#160;protected]</span></a></p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:service@molos.com.tw">service@molos.com.tw</a></p>
                 <p><i class="fas fa-phone"></i> 02-1234-5678</p>
             </div>
         </div>
         <div class="footer-copy">&copy; 2026 Molos 毛樂適寵物營養專家 版權所有</div>
+        </div>
     </footer>
 
-    <!-- EmailJS SDK -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/main.js"></script>
-    <script>
-    /* ── 獸醫師專區聯絡表單 ── */
-    (function () {
-        var EMAILJS_SERVICE_ID  = 'service_khh7778';
-        var EMAILJS_TEMPLATE_ID = 'template_2y1q98l';
-        var EMAILJS_PUBLIC_KEY  = 'xnd9kva9gcXOc_7kB';
-        var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-
-        var msgArea   = document.getElementById('vet-message');
-        var charCount = document.getElementById('vet-char-count');
-        var hintMsg   = document.getElementById('hint-vet-message');
-
-        if (msgArea && charCount) {
-            msgArea.addEventListener('input', function () {
-                var len = this.value.length;
-                charCount.textContent = len;
-                hintMsg.style.display = 'flex';
-                charCount.style.color = len >= 900 ? '#e67e22' : '';
-            });
-        }
-
-        function validateField(inputId, errId, checkFn) {
-            var field = document.getElementById(inputId);
-            var errEl = document.getElementById(errId);
-            if (!field || !errEl) return true;
-            var ok = checkFn(field.value.trim());
-            field.classList.toggle('is-error', !ok);
-            field.classList.toggle('is-valid',  ok);
-            errEl.classList.toggle('error', !ok);
-            if (ok) errEl.style.display = 'none';
-            return ok;
-        }
-
-        ['vet-name','vet-email','vet-subject','vet-message'].forEach(function(id) {
-            var el = document.getElementById(id);
-            if (!el) return;
-            el.addEventListener('blur', function() {
-                var map = {
-                    'vet-name'   : ['err-vet-name',    function(v){ return v.length >= 2; }],
-                    'vet-email'  : ['err-vet-email',   function(v){ return EMAIL_RE.test(v); }],
-                    'vet-subject': ['err-vet-subject', function(v){ return v !== ''; }],
-                    'vet-message': ['err-vet-message', function(v){ return v.length >= 10; }]
-                };
-                var rule = map[id];
-                if (rule) validateField(id, rule[0], rule[1]);
-            });
-        });
-
-        document.getElementById('contact-form-vet').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var v1 = validateField('vet-name',    'err-vet-name',    function(v){ return v.length >= 2; });
-            var v2 = validateField('vet-email',   'err-vet-email',   function(v){ return EMAIL_RE.test(v); });
-            var v3 = validateField('vet-subject', 'err-vet-subject', function(v){ return v !== ''; });
-            var v4 = validateField('vet-message', 'err-vet-message', function(v){ return v.length >= 10; });
-            if (!v1 || !v2 || !v3 || !v4) {
-                var firstErr = this.querySelector('.is-error');
-                if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
-
-            var btn = document.getElementById('btn-submit-vet');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span>傳送中…';
-            document.getElementById('send-error-vet').style.display = 'none';
-
-            var params = {
-                from_name : document.getElementById('vet-name').value.trim(),
-                reply_to  : document.getElementById('vet-email').value.trim(),
-                subject   : '[獸醫師專區] ' + document.getElementById('vet-subject').value,
-                message   : document.getElementById('vet-message').value.trim()
-            };
-
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-                .then(function() {
-                    document.getElementById('contact-form-vet').style.display = 'none';
-                    document.getElementById('contact-success-vet').style.display = 'block';
-                    document.getElementById('contact-success-vet').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                })
-                .catch(function(err) {
-                    console.error('[EmailJS] 失敗:', err);
-                    document.getElementById('send-error-vet').style.display = 'block';
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i>重新送出';
-                });
-        });
-
-        document.getElementById('btn-again-vet').addEventListener('click', function() {
-            var form = document.getElementById('contact-form-vet');
-            form.reset();
-            charCount && (charCount.textContent = '0');
-            form.querySelectorAll('.form-control').forEach(function(el){ el.classList.remove('is-error','is-valid'); });
-            form.querySelectorAll('.field-msg').forEach(function(el){ el.classList.remove('error'); el.style.display='none'; });
-            var btn = document.getElementById('btn-submit-vet');
-            btn.disa
+</body>
+</html>

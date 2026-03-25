@@ -39,7 +39,6 @@
                             </ul>
                         </li>
                         <li><a href="../news/index.html">最新消息</a></li>
-                        <li><a href="../vet.html">獸醫師專區</a></li>
                     </ul>
                 </nav>
                 <button class="nav-cart-btn" id="navCartBtn" aria-label="購物車">
@@ -253,9 +252,46 @@
             </div>
         </div>
         <div class="footer-copy">&copy; 2026 Molos 毛樂適寵物營養專家 版權所有</div>
-        </div>
     </footer>
 
+    <!-- 購物車側欄 -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> 購物車</h3>
+            <button class="cart-close" id="cartClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer">
+            <div class="cart-total">合計：<span id="cartTotal">NT$ 0</span></div>
+            <a href="../checkout-maintenance.html" class="btn-primary cart-checkout-btn">前往結帳</a>
+        </div>
+    </div>
+
     <script src="../js/main.js"></script>
+    <script>
+    /* 系列 Tab 切換 */
+    document.querySelectorAll('.series-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.series-tab').forEach(function(t){ t.classList.remove('active'); });
+            document.querySelectorAll('.series-panel').forEach(function(p){ p.classList.remove('active'); });
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.series).classList.add('active');
+        });
+    });
+
+    /* 從 hash 自動切換 Tab（如 #supplements） */
+    window.addEventListener('DOMContentLoaded', function() {
+        var hash = window.location.hash.replace('#','');
+        if (hash === 'supplements' || hash === 'low-allergen') {
+            document.querySelectorAll('.series-tab').forEach(function(t){ t.classList.remove('active'); });
+            document.querySelectorAll('.series-panel').forEach(function(p){ p.classList.remove('active'); });
+            var tab = document.querySelector('[data-series="' + hash + '"]');
+            var panel = document.getElementById(hash);
+            if (tab) tab.classList.add('active');
+            if (panel) panel.classList.add('active');
+        }
+    });
+    </script>
 </body>
 </html>
