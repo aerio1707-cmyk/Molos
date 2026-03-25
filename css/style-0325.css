@@ -21,7 +21,6 @@
      16. 響應式（RWD）
    ============================================================= */
 
-
 /* ============================================================
    00. CSS 變數 — 品牌色系與全域參數
    ============================================================ */
@@ -1331,7 +1330,7 @@ body.menu-open {
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 16px;
     margin-left: auto;   /* 推到 logo 右側盡頭 */
 }
 
@@ -1504,6 +1503,11 @@ body.menu-open {
     .nav-member-caret { display: none; }
     .nav-member-btn { padding: 6px; }
     .nav-dropdown { right: -8px; }
+    .hero-overlay h1 { font-size: 1.8rem; }
+    .section-header h2 { font-size: 2.1rem; }
+    .section-header p { font-size: 1.0rem; }
+    .trust-item h4 { font-size: 1.3rem; }
+    .trust-item p { font-size: 0.8rem;}
 }
 
 

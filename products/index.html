@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <link rel="icon" type="image/png" href="../my-favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../my-favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../my-favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../my-favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Molos 毛樂適" />
+    <link rel="manifest" href="../my-favicon/site.webmanifest" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>產品系列 - Molos 毛樂適</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=ZCOOL+Quanyi&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html"><img src="../images/logo.png" alt="Molos 毛樂適" class="brand-logo"></a>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="切換選單">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-right">
+                <nav class="nav-menu" id="navMenu">
+                    <ul>
+                        <li><a href="../index.html">首頁</a></li>
+                        <li><a href="../about.html">關於毛樂適</a></li>
+                        <li class="nav-dropdown-parent">
+                            <a href="../products/index.html" class="nav-has-dropdown">
+                                毛樂適系列 <i class="fas fa-chevron-down nav-dropdown-caret"></i>
+                            </a>
+                            <ul class="nav-sub-menu">
+                                <li><a href="../products/index.html#low-allergen">低敏肉泥系列</a></li>
+                                <li><a href="../products/index.html#supplements">營養品系列</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="../news/index.html">最新消息</a></li>
+                    </ul>
+                </nav>
+                <button class="nav-cart-btn" id="navCartBtn" aria-label="購物車">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="navCartBadge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>毛樂適系列</h1>
+            <p>為毛孩每個健康需求，精準守護</p>
+        </div>
+    </section>
+
+    <!-- 系列 Tab 切換 -->
+    <div class="products-page-wrap">
+        <div class="container">
+
+            <div class="series-tabs">
+                <button class="series-tab active" data-series="low-allergen">
+                    <i class="fas fa-drumstick-bite"></i> 低敏肉泥系列
+                </button>
+                <button class="series-tab" data-series="supplements">
+                    <i class="fas fa-capsules"></i> 營養品系列
+                </button>
+            </div>
+
+            <!-- 低敏肉泥系列 -->
+            <div class="series-panel active" id="low-allergen">
+                <div class="series-panel-header">
+                    <h2>低敏肉泥系列</h2>
+                    <p>精選低致敏蛋白質原料，針對不同健康需求設計的機能性肉泥。美味好吸收，毛孩愛不釋口。</p>
+                </div>
+                <div class="product-grid">
+                    <div class="product-item" style="--accent-color:#E5F1E1;">
+                        <div class="product-card">
+                            <span class="product-label" style="background:#79A37D;">靈活關鍵</span>
+                            <div class="product-img">
+                                <img src="../images/products/joint-care.png" alt="關節力">
+                            </div>
+                            <div class="product-content">
+                                <h3>關節力 <small>羊肉 + 牛心</small></h3>
+                                <p class="tech-tag">Tendoguard™ 專利技術</p>
+                                <p class="description">定量修護 x 雙萃取高效吸收，如風一般的靈活。</p>
+                                <a href="detail.html" class="btn-more">了解更多</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-item" style="--accent-color:#E1F5FE;">
+                        <div class="product-card">
+                            <span class="product-label" style="background:#7BB8D4;">皮毛健康</span>
+                            <div class="product-img">
+                                <img src="../images/products/skin-care.png" alt="柔膚力">
+                            </div>
+                            <div class="product-content">
+                                <h3>柔膚力 <small>鱈魚 + 鴨肉</small></h3>
+                                <p class="tech-tag">Lactopy + 賽洛美</p>
+                                <p class="description">深度保濕鎖水，改善敏感，打造閃亮亮毛髮。</p>
+                                <a href="skin-care.html" class="btn-more">了解更多</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-item" style="--accent-color:#FFF9C4;">
+                        <div class="product-card">
+                            <span class="product-label" style="background:#E6B347;">腸道守護</span>
+                            <div class="product-img">
+                                <img src="../images/products/gut-health.png" alt="好腸力">
+                            </div>
+                            <div class="product-content">
+                                <h3>好腸力 <small>鹿肉 + 火雞肉</small></h3>
+                                <p class="tech-tag">Glutamine 麩醯胺酸</p>
+                                <p class="description">菌叢平衡維持消化動力，由內而外強化腸壁屏障。</p>
+                                <a href="gut-health.html" class="btn-more">了解更多</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-item" style="--accent-color:#F3E5F5;">
+                        <div class="product-card">
+                            <span class="product-label" style="background:#A68CBF;">免疫強化</span>
+                            <div class="product-img">
+                                <img src="../images/products/immunity.png" alt="免疫盾">
+                            </div>
+                            <div class="product-content">
+                                <h3>免疫盾 <small>雞肉 + 牛心</small></h3>
+                                <p class="tech-tag">NKG 7菌共生技術</p>
+                                <p class="description">核心保護草本盾牌，啟動由內而外的三層防護。</p>
+                                <a href="probiotics.html" class="btn-more">了解更多</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-item" style="--accent-color:#FFE0B2;">
+                        <div class="product-card">
+                            <span class="product-label" style="background:#FF9D42;">元氣補給</span>
+                            <div class="product-img">
+                                <img src="../images/products/vitality.png" alt="寵活力">
+                            </div>
+                            <div class="product-content">
+                                <h3>寵活力 <small>全方位配方</small></h3>
+                                <p class="tech-tag">高純度營養補充</p>
+                                <p class="description">針對體力下降與熟齡毛孩，快速恢復滿滿元氣。</p>
+                                <a href="cat-hairball.html" class="btn-more">了解更多</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 營養品系列 -->
+            <div class="series-panel" id="supplements">
+                <div class="series-panel-header">
+                    <h2>營養品系列</h2>
+                    <p>高濃縮膠囊設計，針對特定健康需求深度補充，每日一顆，守護全面。</p>
+                </div>
+                <div class="product-grid">
+                    <div class="product-item" style="--accent-color:#FFF3E0;">
+                        <div class="product-card">
+                            <span class="product-label" style="background:#FF9D42;">NEW</span>
+                            <div class="product-img" style="background:#fff8f0;">
+                                <img src="../images/products/vitality.png" alt="全效活力錠">
+                            </div>
+                            <div class="product-content">
+                                <h3>全效活力錠 <small>複合維他命</small></h3>
+                                <p class="tech-tag">11 種必需維他命 + 礦物質</p>
+                                <p class="description">一錠補足每日所需，維持毛孩活力、提升整體免疫與代謝功能。</p>
+                                <a href="supplement-vitality.html" class="btn-more">了解更多</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 更多產品即將推出 -->
+                    <div class="product-item coming-soon-item">
+                        <div class="product-card coming-soon-card">
+                            <div class="coming-soon-content">
+                                <i class="fas fa-flask"></i>
+                                <h3>更多產品</h3>
+                                <p>研發中，敬請期待</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-item coming-soon-item">
+                        <div class="product-card coming-soon-card">
+                            <div class="coming-soon-content">
+                                <i class="fas fa-flask"></i>
+                                <h3>更多產品</h3>
+                                <p>研發中，敬請期待</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 安心保證 -->
+    <section class="trust-section">
+        <div class="container">
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <div class="trust-icon-wrapper">
+                        <img src="../images/icons/icon-natural.png" alt="天然無添加">
+                    </div>
+                    <h4>天然無添加</h4>
+                    <p>嚴選人用等級原料，拒絕人工香料與色素。</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon-wrapper">
+                        <img src="../images/icons/icon-science.png" alt="專業研發">
+                    </div>
+                    <h4>專業研發</h4>
+                    <p>獸醫與營養師共同開發，精準補充毛孩所需。</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon-wrapper">
+                        <img src="../images/icons/icon-check.png" alt="嚴格檢驗">
+                    </div>
+                    <h4>嚴格檢驗</h4>
+                    <p>每批產品皆通過 SGS 重金屬與微生物檢測。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-col">
+                <h3>Molos 毛樂適</h3>
+                <p>專業研發犬貓保健食品，堅持天然無添加，用最純粹的營養守護毛孩的健康與快樂。</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>快速導覽</h4>
+                <ul>
+                    <li><a href="../about.html">關於我們</a></li>
+                    <li><a href="../products/index.html">產品系列</a></li>
+                    <li><a href="../news/index.html">衛教知識</a></li>
+                    <li><a href="../report.html">安心報告</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>聯絡我們</h4>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:service@molos.com.tw">service@molos.com.tw</a></p>
+                <p><i class="fas fa-phone"></i> 02-1234-5678</p>
+            </div>
+        </div>
+        <div class="footer-copy">&copy; 2026 Molos 毛樂適寵物營養專家 版權所有</div>
+    </footer>
+
+    <!-- 購物車側欄 -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> 購物車</h3>
+            <button class="cart-close" id="cartClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer">
+            <div class="cart-total">合計：<span id="cartTotal">NT$ 0</span></div>
+            <a href="../checkout-maintenance.html" class="btn-primary cart-checkout-btn">前往結帳</a>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+    /* 系列 Tab 切換 */
+    document.querySelectorAll('.series-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.series-tab').forEach(function(t){ t.classList.remove('active'); });
+            document.querySelectorAll('.series-panel').forEach(function(p){ p.classList.remove('active'); });
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.series).classList.add('active');
+        });
+    });
+
+    /* 從 hash 自動切換 Tab（如 #supplements） */
+    window.addEventListener('DOMContentLoaded', function() {
+        var hash = window.location.hash.replace('#','');
+        if (hash === 'supplements' || hash === 'low-allergen') {
+            document.querySelectorAll('.series-tab').forEach(function(t){ t.classList.remove('active'); });
+            document.querySelectorAll('.series-panel').forEach(function(p){ p.classList.remove('active'); });
+            var tab = document.querySelector('[data-series="' + hash + '"]');
+            var panel = document.getElementById(hash);
+            if (tab) tab.classList.add('active');
+            if (panel) panel.classList.add('active');
+        }
+    });
+    </script>
+</body>
+</html>

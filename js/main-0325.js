@@ -468,3 +468,105 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 })();
+
+
+/* ============================================================
+   07. 會員系統 — 全站登入狀態管理 (MolosAuth)
+   - 以 sessionStorage 模擬登入狀態
+   - Navbar 動態切換：未登入顯示「登入」按鈕，
+     已登入顯示頭像 + 暱稱 + 下拉選單
+   ============================================================ */
+
+/* ── Auth 核心模組（全域可呼叫）── */
+var MolosAuth = (function () {
+    var KEY = 'molos_user';
+
+    return {
+        login: function (userObj) {
+            sessionStorage.setItem(KEY, JSON.stringify(userObj));
+        },
+        logout: function () {
+            sessionStorage.removeItem(KEY);
+        },
+        getUser: function () {
+            try { return JSON.parse(sessionStorage.getItem(KEY)); }
+            catch (e) { return null; }
+        },
+        isLoggedIn: function () {
+            return !!this.getUser();
+        }
+    };
+})();
+
+
+/* ── Navbar 會員入口渲染 ── */
+document.addEventListener('DOMContentLoaded', function () {
+
+    var navRight = document.querySelector('.nav-right');
+    if (!navRight) return;
+
+    /* 判斷路徑前綴（products/ news/ 子目錄需往上一層）*/
+    var path = window.location.pathname;
+    var base = (path.indexOf('/products/') !== -1 || path.indexOf('/news/') !== -1)
+        ? '../' : '';
+
+    var user = MolosAuth.getUser();
+
+    if (!user) {
+        /* ── 未登入：顯示「登入」按鈕 ── */
+        var loginBtn = document.createElement('a');
+        loginBtn.href      = base + 'login.html';
+        loginBtn.className = 'nav-login-btn';
+        loginBtn.innerHTML = '<i class="fas fa-user"></i><span>登入</span>';
+        navRight.insertBefore(loginBtn, navRight.querySelector('.nav-cart-btn'));
+
+    } else {
+        /* ── 已登入：顯示頭像 + 暱稱 + 下拉選單 ── */
+        var initial = (user.name || 'U').charAt(0).toUpperCase();
+
+        var memberBtn = document.createElement('div');
+        memberBtn.className = 'nav-member';
+        memberBtn.innerHTML =
+            '<button class="nav-member-btn" id="navMemberBtn" aria-expanded="false">' +
+                (user.avatar
+                    ? '<img src="' + user.avatar + '" alt="頭像" class="nav-avatar-img">'
+                    : '<span class="nav-avatar-initial">' + initial + '</span>'
+                ) +
+                '<span class="nav-member-name">' + (user.name || '會員') + '</span>' +
+                '<i class="fas fa-chevron-down nav-member-caret"></i>' +
+            '</button>' +
+            '<div class="nav-dropdown" id="navDropdown">' +
+                '<a href="' + base + 'member.html" class="nav-dd-item">' +
+                    '<i class="fas fa-user-edit"></i> 個人資料</a>' +
+                '<a href="' + base + 'member.html#orders" class="nav-dd-item">' +
+                    '<i class="fas fa-box"></i> 訂單查詢</a>' +
+                '<div class="nav-dd-divider"></div>' +
+                '<button class="nav-dd-item nav-dd-logout" id="navLogout">' +
+                    '<i class="fas fa-sign-out-alt"></i> 登出</button>' +
+            '</div>';
+
+        navRight.insertBefore(memberBtn, navRight.querySelector('.nav-cart-btn'));
+
+        /* 下拉開關 */
+        var memberBtnEl = document.getElementById('navMemberBtn');
+        var dropdown    = document.getElementById('navDropdown');
+
+        memberBtnEl.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var isOpen = dropdown.classList.toggle('open');
+            memberBtnEl.setAttribute('aria-expanded', isOpen);
+        });
+
+        /* 點外面關閉 */
+        document.addEventListener('click', function () {
+            dropdown.classList.remove('open');
+            memberBtnEl.setAttribute('aria-expanded', false);
+        });
+
+        /* 登出 */
+        document.getElementById('navLogout').addEventListener('click', function () {
+            MolosAuth.logout();
+            window.location.href = base + 'index.html';
+        });
+    }
+});
