@@ -169,7 +169,7 @@ body {
 
 /* 選單開啟時，遮罩縮短至不蓋住右側選單區域 */
 body.menu-open .menu-overlay {
-    width: calc(100% - min(33vw, 200px));  /* 100% 減去選單寬度 */
+    width: calc(100% - min(43vw, 260px));  /* 100% 減去選單寬度 */
 }
 
 /* 側滑選單：z-index 定義在全域，確保永遠高於遮罩層 */
@@ -1579,7 +1579,7 @@ body.menu-open {
         position: fixed;
         top: 0;
         right: -100%;
-        width: min(33vw, 200px);
+        width: min(43vw, 260px);
         height: 100vh;
         background-color: var(--white) !important;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
@@ -2534,6 +2534,12 @@ body.menu-open {
 }
 .nav-dropdown-parent:hover .nav-dropdown-caret { transform: rotate(180deg); }
 
+/* 手機版：箭頭由 .open class 控制，不用 hover */
+@media (max-width: 768px) {
+    .nav-dropdown-parent:hover .nav-dropdown-caret { transform: none; }
+    .nav-dropdown-parent.open  .nav-dropdown-caret { transform: rotate(180deg) !important; }
+}
+
 .nav-sub-menu {
     position: absolute;
     top: 100%;             /* 緊貼父元素底部，無空隙 */
@@ -2697,11 +2703,11 @@ body.menu-open {
 
     .nav-sub-menu li a {
         display: block;
-        padding: 12px 12px 12px 32px;   /* 左側縮排，明顯右移 */
+        padding: 11px 12px 11px 36px;   /* 左側縮排製造層次感 */
         text-align: left;
-        font-size: 0.82rem;
+        font-size: 0.78rem;             /* 明顯小於父項目 0.92rem */
         font-weight: 400;
-        color: #999 !important;
+        color: #aaa !important;         /* 更淺的灰，強化層次差異 */
         border-left: none;
         border-radius: 0;
         position: relative;
@@ -2711,14 +2717,14 @@ body.menu-open {
     .nav-sub-menu li a::before {
         content: '';
         position: absolute;
-        left: 18px;
+        left: 20px;
         top: 50%;
         transform: translateY(-50%);
-        width: 5px;
-        height: 5px;
+        width: 4px;
+        height: 4px;
         border-radius: 50%;
         background: var(--primary-orange);
-        opacity: 0.5;
+        opacity: 0.45;
     }
 
     .nav-sub-menu li a:hover,
