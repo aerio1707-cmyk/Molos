@@ -67,8 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (window.innerWidth > 768) return;
             e.preventDefault();
             parent.classList.toggle('open');
-            var caret = parentLink.querySelector('.nav-dropdown-caret');
-            if (caret) caret.style.transform = parent.classList.contains('open') ? 'rotate(180deg)' : '';
+            // 箭頭旋轉由 CSS .open class 控制，不用 inline style
         });
     });
 
