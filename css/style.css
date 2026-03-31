@@ -169,7 +169,7 @@ body {
 
 /* 選單開啟時，遮罩縮短至不蓋住右側選單區域 */
 body.menu-open .menu-overlay {
-    width: calc(100% - 210px);  /* 100% 減去選單寬度 */
+    width: calc(100% - min(33vw, 200px));  /* 100% 減去選單寬度 */
 }
 
 /* 側滑選單：z-index 定義在全域，確保永遠高於遮罩層 */
@@ -1579,7 +1579,7 @@ body.menu-open {
         position: fixed;
         top: 0;
         right: -100%;
-        width: 210px;
+        width: min(33vw, 200px);
         height: 100vh;
         background-color: var(--white) !important;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
@@ -1607,9 +1607,9 @@ body.menu-open {
 
     .nav-menu ul li a {
         display: block;
-        padding: 18px 12px;
-        text-align: center;
-        font-size: 1rem;
+        padding: 16px 16px;
+        text-align: left;
+        font-size: 0.92rem;
         color: var(--text-color);
     }
 
@@ -2657,16 +2657,16 @@ body.menu-open {
         align-items: stretch;   /* 子元素撐滿整行寬度 */
     }
 
-    /* 父項目連結：保持置中，加入展開箭頭的空間 */
+    /* 父項目連結：左對齊，與其他選單項目一致 */
     .nav-has-dropdown {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         width: 100%;
-        padding: 18px 12px;
-        font-size: 1rem;
-        text-align: center;
-        color: var(--primary-orange);   /* 橘色標示有子選單 */
+        padding: 16px 16px;
+        font-size: 0.92rem;
+        text-align: left;
+        color: var(--primary-orange);
         font-weight: 600;
         gap: 6px;
     }
@@ -2676,13 +2676,13 @@ body.menu-open {
         position: static;
         transform: none !important;
         box-shadow: none;
-        background: var(--secondary-yellow);
-        border-radius: 10px;
+        background: transparent;
+        border-radius: 0;
         opacity: 1;
         pointer-events: auto;
         display: none;
-        padding: 4px 0;
-        margin: 0 16px 8px;   /* 左右縮排，與父項目形成層次感 */
+        padding: 0;
+        margin: 0;
         width: auto;
         min-width: unset;
     }
@@ -2690,21 +2690,46 @@ body.menu-open {
     /* 展開時顯示子選單 */
     .nav-dropdown-parent.open .nav-sub-menu { display: block; }
 
-    /* 子選單連結樣式 */
+    /* 子選單連結樣式：明確縮排 + 字體縮小 + 左側指示線 */
+    .nav-sub-menu li {
+        border-bottom: none !important;  /* 子項目不顯示分隔線 */
+    }
+
     .nav-sub-menu li a {
         display: block;
-        padding: 14px 16px;
-        text-align: center;
-        font-size: 0.9rem;
-        color: var(--text-dark) !important;
-        border-left: none;          /* 手機版移除左側邊線 */
-        border-radius: 8px;
+        padding: 12px 12px 12px 32px;   /* 左側縮排，明顯右移 */
+        text-align: left;
+        font-size: 0.82rem;
+        font-weight: 400;
+        color: #999 !important;
+        border-left: none;
+        border-radius: 0;
+        position: relative;
+    }
+
+    /* 子選單項目左側小圓點裝飾 */
+    .nav-sub-menu li a::before {
+        content: '';
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--primary-orange);
+        opacity: 0.5;
     }
 
     .nav-sub-menu li a:hover,
     .nav-sub-menu li a:active {
-        background: rgba(255, 157, 66, 0.15);
+        background: var(--secondary-yellow);
         color: var(--primary-orange) !important;
         border-left: none;
+    }
+
+    .nav-sub-menu li a:hover::before,
+    .nav-sub-menu li a:active::before {
+        opacity: 1;
     }
 }
