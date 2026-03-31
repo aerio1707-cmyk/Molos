@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
-    <link rel="icon" type="image/png" href="../my-favicon/favicon-96x96.png" sizes="96x96">
-    <link rel="shortcut icon" href="../my-favicon/favicon.ico">
+    <link rel="icon" type="image/png" href="../my-favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../my-favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../my-favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../my-favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Molos 毛樂適" />
+    <link rel="manifest" href="../my-favicon/site.webmanifest" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>最新消息 - Molos 毛樂適寵物營養專家</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=ZCOOL+Quanyi&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -25,7 +29,15 @@
                     <ul>
                         <li><a href="../index.html">首頁</a></li>
                         <li><a href="../about.html">關於毛樂適</a></li>
-                        <li><a href="../index.html#products">營養品系列</a></li>
+                        <li class="nav-dropdown-parent">
+                            <a href="../products/index.html" class="nav-has-dropdown">
+                                毛樂適系列 <i class="fas fa-chevron-down nav-dropdown-caret"></i>
+                            </a>
+                            <ul class="nav-sub-menu">
+                                <li><a href="../products/index.html#low-allergen">低敏肉泥系列</a></li>
+                                <li><a href="../products/index.html#supplements">營養品系列</a></li>
+                            </ul>
+                        </li>
                         <li><a href="index.html">最新消息</a></li>
                         <li><a href="../vet.html">獸醫師專區</a></li>
                     </ul>
@@ -130,28 +142,27 @@
             <div class="footer-col">
                 <h3>Molos 毛樂適</h3>
                 <p>專業研發犬貓保健食品，堅持天然無添加，用最純粹的營養守護毛孩的健康與快樂。</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
             <div class="footer-col">
                 <h4>快速導覽</h4>
                 <ul>
                     <li><a href="../about.html">關於我們</a></li>
-                    <li><a href="../index.html#products">產品清單</a></li>
+                    <li><a href="../products/index.html">產品系列</a></li>
                     <li><a href="index.html">衛教知識</a></li>
+                    <li><a href="../report.html">安心報告</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>聯絡我們</h4>
                 <p><i class="fas fa-envelope"></i> <a href="mailto:service@molos.com.tw">service@molos.com.tw</a></p>
                 <p><i class="fas fa-phone"></i> 02-1234-5678</p>
-                <div class="footer-social">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                </div>
             </div>
         </div>
-        <div class="footer-copy">
-            &copy; 2026 Molos 毛
-        </div>
+        <div class="footer-copy">&copy; 2026 Molos 毛樂適寵物營養專家 版權所有</div>
     </footer>
 
     <script src="../js/main.js"></script>

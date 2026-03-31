@@ -2531,13 +2531,15 @@ body.menu-open {
 .nav-dropdown-caret {
     font-size: 0.65rem;
     transition: transform 0.2s;
+    display: inline-block;  /* 確保 transform 生效 */
 }
+/* 桌機：hover 展開箭頭旋轉 */
 .nav-dropdown-parent:hover .nav-dropdown-caret { transform: rotate(180deg); }
 
-/* 手機版：箭頭由 .open class 控制，不用 hover */
+/* 手機版：完全由 .open class 控制，禁用 hover 效果 */
 @media (max-width: 768px) {
-    .nav-dropdown-parent:hover .nav-dropdown-caret { transform: none; }
-    .nav-dropdown-parent.open  .nav-dropdown-caret { transform: rotate(180deg) !important; }
+    .nav-dropdown-parent .nav-dropdown-caret          { transform: rotate(0deg)   !important; }
+    .nav-dropdown-parent.open .nav-dropdown-caret     { transform: rotate(180deg) !important; }
 }
 
 .nav-sub-menu {
