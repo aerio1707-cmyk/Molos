@@ -2531,7 +2531,7 @@ body.menu-open {
 .nav-dropdown-caret {
     font-size: 0.65rem;
     transition: transform 0.2s;
-    display: inline-block;  /* 確保 transform 生效 */
+    display: inline-block;
 }
 /* 桌機：hover 展開箭頭旋轉 */
 .nav-dropdown-parent:hover .nav-dropdown-caret { transform: rotate(180deg); }
@@ -2681,22 +2681,34 @@ body.menu-open {
 
     /* 子選單：靜態定位，預設隱藏，展開後顯示 */
     .nav-sub-menu {
-        position: static;
-        transform: none !important;
-        box-shadow: none;
-        background: transparent;
-        border-radius: 0;
-        opacity: 1;
-        pointer-events: auto;
-        display: none;
-        padding: 0;
-        margin: 0;
-        width: auto;
-        min-width: unset;
+        position: static   !important;
+        transform: none    !important;
+        box-shadow: none   !important;
+        background: transparent !important;
+        border-radius: 0   !important;
+        opacity: 1         !important;   /* 不靠 opacity 控制，改靠 display */
+        pointer-events: auto !important;
+        display: none      !important;   /* 預設收合 */
+        padding: 0         !important;
+        margin: 0          !important;
+        width: auto        !important;
+        min-width: unset   !important;
+        z-index: auto      !important;
+        transition: none   !important;   /* 手機版不需要 transition */
     }
 
-    /* 展開時顯示子選單 */
-    .nav-dropdown-parent.open .nav-sub-menu { display: block; }
+    /* hover 殘留問題：手機版強制覆蓋桌機 hover 規則 */
+    .nav-dropdown-parent:hover .nav-sub-menu {
+        display: none      !important;   /* 阻斷 hover 造成的顯示 */
+        opacity: 1         !important;
+        pointer-events: auto !important;
+        transform: none    !important;
+    }
+
+    /* 只有 JS 加上 .open 時才展開 */
+    .nav-dropdown-parent.open .nav-sub-menu {
+        display: block     !important;
+    }
 
     /* 子選單連結樣式：明確縮排 + 字體縮小 + 左側指示線 */
     .nav-sub-menu li {
