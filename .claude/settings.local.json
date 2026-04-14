@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Aerio/.claude/projects/c--Users-Aerio-Desktop-MyWeb-Molos/memory//**)",
+      "Read(//c/Users/Aerio/.claude/projects/c--Users-Aerio-Desktop-MyWeb-Molos/memory/**)"
+    ]
+  }
+}
