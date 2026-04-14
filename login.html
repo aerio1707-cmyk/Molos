@@ -45,8 +45,9 @@
             padding: 32px 40px 28px;
             text-align: center;
         }
-        .login-brand img { height: 56px; filter: brightness(0) invert(1); }
-        .login-brand p { color: rgba(255,255,255,0.85); font-size: 0.9rem; margin: 8px 0 0; }
+        .login-brand .login-logo { height: 56px; filter: brightness(0) invert(1); }
+        .login-brand .login-illus { width: 140px; height: auto; display: block; margin: 12px auto 4px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.12)); }
+        .login-brand p { color: rgba(255,255,255,0.85); font-size: 0.9rem; margin: 4px 0 0; }
 
         /* ── 頁籤切換 ── */
         .auth-tabs {
@@ -331,7 +332,8 @@
 
             <!-- 品牌頭部 -->
             <div class="login-brand">
-                <img src="images/logo.png" alt="Molos 毛樂適">
+                <img src="images/logo.png" alt="Molos 毛樂適" class="login-logo">
+                <img src="images/cat-dog-illustration.png" alt="" class="login-illus" aria-hidden="true">
                 <p>歡迎回來，毛孩守護者 🐾</p>
             </div>
 
