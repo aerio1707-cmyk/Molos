@@ -1844,6 +1844,37 @@ body.menu-open {
     font-size: 1rem;
 }
 
+/* 文章內嵌影片 */
+.article-video {
+    margin: 32px 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.article-video video {
+    width: 100%;
+    display: block;
+    max-height: 500px;
+    object-fit: contain;
+}
+
+.article-video-caption {
+    background: #f4f4f4;
+    padding: 10px 16px;
+    font-size: 0.84rem;
+    color: #999;
+    text-align: center;
+    border-top: 1px solid #e8e8e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.article-video-caption i { color: var(--primary-orange); }
+
 /* 文章列表樣式 */
 .article-list {
     list-style: none;
