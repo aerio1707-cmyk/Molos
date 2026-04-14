@@ -134,6 +134,7 @@
             border-radius: 20px;
             font-size: 0.88rem;
             margin-bottom: 20px;
+            white-space: nowrap;
         }
         .vet-hero h1 {
             font-size: 2.4rem;
@@ -254,6 +255,10 @@
             .contact-qr-side { width: 100%; position: static; }
             .vet-hero h1 { font-size: 1.7rem; }
             .contact-form-wrap { padding: 30px 20px; }
+        }
+        /* 極小螢幕（< 400px）badge 字體縮小防止溢出 */
+        @media (max-width: 400px) {
+            .vet-hero .vet-badge { font-size: 0.76rem; padding: 5px 12px; gap: 6px; }
         }
     </style>
 </head>
@@ -521,7 +526,7 @@
                     <div class="qr-label">
                         <i class="fab fa-line"></i> LINE 獸醫師社群
                     </div>
-                    <img src="images/line-qr.jpg" alt="LINE 獸醫師社群 QR Code" class="qr-img">
+                    <img src="images/Line-qr.jpg" alt="LINE 獸醫師社群 QR Code" class="qr-img">
                     <h4>加入獸醫師專屬社群</h4>
                     <p>掃描 QR Code 或點擊下方按鈕，加入 Molos 獸醫師 LINE 社群，即時獲得產品更新、臨床資料與專業支援。</p>
                     <a href="https://line.me/ti/g/molos-vet" class="btn-line" target="_blank" rel="noopener">
