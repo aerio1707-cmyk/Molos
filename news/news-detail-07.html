@@ -75,7 +75,7 @@
             </header>
 
             <!-- 封面圖 -->
-            <img src="../images/news/news-07.jpg" alt="全效活力錠正式上市" class="article-cover">
+            <img src="../images/news/news-07.svg" alt="全效活力錠正式上市" class="article-cover">
 
             <!-- 文章內容 -->
             <div class="article-body">
@@ -102,20 +102,52 @@
                      影片嵌入區塊
                      影片檔案請置放於：Molos/videos/news-07-product-launch.mp4
                      建議格式：MP4（H.264 + AAC），解析度 1080p 或 720p
+                     置放影片後，下方 JS 會自動切換顯示播放器
                 ════════════════════════════════════════════ -->
-                <div class="article-video">
+                <div class="article-video" id="videoBlock">
+                    <!-- 影片準備中佔位卡（有影片後自動隱藏） -->
+                    <div class="video-placeholder" id="videoPlaceholder">
+                        <div class="video-placeholder-inner">
+                            <div class="video-placeholder-icon">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <h4>產品介紹影片</h4>
+                            <p>影片製作中，即將上線</p>
+                            <span class="video-placeholder-badge">
+                                <i class="fas fa-clock"></i> Coming Soon
+                            </span>
+                        </div>
+                    </div>
+                    <!-- 實際影片播放器（有影片檔案後顯示） -->
                     <video
+                        id="productVideo"
                         controls
                         preload="metadata"
-                        poster="../images/news/news-07.jpg"
-                        aria-label="全效活力錠產品介紹影片">
+                        poster="../images/news/news-07.svg"
+                        aria-label="全效活力錠產品介紹影片"
+                        style="display:none;">
                         <source src="../videos/news-07-product-launch.mp4" type="video/mp4">
-                        <p>您的瀏覽器不支援 HTML5 影片播放，請<a href="../videos/news-07-product-launch.mp4">點此下載影片</a>觀看。</p>
                     </video>
                     <div class="article-video-caption">
                         <i class="fas fa-play-circle"></i> 全效活力錠產品介紹影片 · Molos 毛樂適 2026
                     </div>
                 </div>
+                <script>
+                (function () {
+                    var video = document.getElementById('productVideo');
+                    var placeholder = document.getElementById('videoPlaceholder');
+                    if (!video) return;
+                    // 嘗試 fetch 確認影片檔案是否存在
+                    fetch('../videos/news-07-product-launch.mp4', { method: 'HEAD' })
+                        .then(function (res) {
+                            if (res.ok) {
+                                placeholder.style.display = 'none';
+                                video.style.display = 'block';
+                            }
+                        })
+                        .catch(function () { /* 檔案不存在，維持佔位卡 */ });
+                })();
+                </script>
 
                 <h3>適用對象</h3>
                 <p>全效活力錠針對以下毛孩設計，每日一錠，輕鬆融入日常：</p>

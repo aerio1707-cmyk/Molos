@@ -1875,6 +1875,63 @@ body.menu-open {
 
 .article-video-caption i { color: var(--primary-orange); }
 
+/* 影片佔位卡（影片上線前顯示） */
+.video-placeholder {
+    background: linear-gradient(135deg, #FFF4E6 0%, #FFE8C8 100%);
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-placeholder-inner {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.video-placeholder-icon {
+    width: 72px;
+    height: 72px;
+    background: rgba(255,157,66,0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border: 2px dashed rgba(255,157,66,0.4);
+}
+
+.video-placeholder-icon i {
+    font-size: 1.8rem;
+    color: var(--primary-orange);
+    opacity: 0.7;
+}
+
+.video-placeholder-inner h4 {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.video-placeholder-inner p {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 16px;
+}
+
+.video-placeholder-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,157,66,0.12);
+    color: var(--primary-orange);
+    font-size: 0.82rem;
+    font-weight: bold;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,157,66,0.25);
+}
+
 /* 文章列表樣式 */
 .article-list {
     list-style: none;
