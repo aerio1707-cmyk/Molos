@@ -1595,6 +1595,20 @@ body.menu-open {
         visibility: visible;
     }
 
+    /* 橫向手機：側滑選單高度與滾動體驗修正（更穩健的 landscape 判斷） */
+    @media (orientation: landscape) and (max-height: 640px) {
+        .nav-menu {
+            height: 100vh;
+            max-height: 100vh;
+            -webkit-overflow-scrolling: touch;
+            overflow-y: auto;
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+        .nav-menu ul {
+            margin-bottom: 8px;
+        }
+    }
+
     .nav-menu ul {
         flex-direction: column;
         width: 100%;
