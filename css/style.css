@@ -1562,7 +1562,6 @@ body.menu-open {
     /* 手機版：nav-menu 已用 position:fixed 脫離 flex 流，flex-basis 歸零不佔空間 */
     .nav-right .nav-menu {
         flex: 0 0 0;
-        overflow: visible;  /* 讓 fixed 選單正常顯示，不被裁切 */
     }
 
     /* 手機版：登入按鈕只顯示圖示 */
@@ -1586,7 +1585,8 @@ body.menu-open {
         z-index: 600 !important;   /* 強制高於遮罩層(500) */
         transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         padding-top: 70px;
-        overflow-y: auto;
+        overflow-x: hidden;
+        overflow-y: auto !important;
         visibility: hidden;
     }
 
