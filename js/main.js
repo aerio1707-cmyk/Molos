@@ -487,24 +487,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /* ============================================================
    07. 會員系統 — 全站登入狀態管理 (MolosAuth)
-   - 以 sessionStorage 模擬登入狀態
+   - 以 localStorage 保存登入狀態（跨分頁/重啟持久）
    - Navbar 動態切換：未登入顯示「登入」按鈕，
      已登入顯示頭像 + 暱稱 + 下拉選單
    ============================================================ */
 
 /* ── Auth 核心模組（全域可呼叫）── */
 var MolosAuth = (function () {
-    var KEY = 'molos_user';
+    var USER_KEY  = 'molos_user';
+    var SB_PREFIX = 'sb-rlmnjvcppucaehgxlmim-';
+
+    function _clearSbTokens() {
+        var keys = [];
+        for (var i = 0; i < localStorage.length; i++) {
+            var k = localStorage.key(i);
+            if (k && k.indexOf(SB_PREFIX) === 0) keys.push(k);
+        }
+        keys.forEach(function (k) { localStorage.removeItem(k); });
+        if (window.db) window.db.auth.signOut();
+    }
 
     return {
         login: function (userObj) {
-            sessionStorage.setItem(KEY, JSON.stringify(userObj));
+            localStorage.setItem(USER_KEY, JSON.stringify(userObj));
         },
         logout: function () {
-            sessionStorage.removeItem(KEY);
+            localStorage.removeItem(USER_KEY);
+            _clearSbTokens();
         },
         getUser: function () {
-            try { return JSON.parse(sessionStorage.getItem(KEY)); }
+            try { return JSON.parse(localStorage.getItem(USER_KEY)); }
             catch (e) { return null; }
         },
         isLoggedIn: function () {

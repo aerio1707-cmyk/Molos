@@ -503,6 +503,204 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+    /* ── member.html 完整邏輯（Supabase 版）── */
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        /* ── 1. 登入保護 ── */
+        window.db.auth.getSession().then(function (res) {
+            var session = res.data && res.data.session;
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+            initPage(session.user);
+        });
+
+        /* ── 2. 初始化頁面 ── */
+        function initPage(authUser) {
+            window.db.from('profiles').select('*').eq('id', authUser.id).single()
+                .then(function (res) {
+                    if (res.error || !res.data) return;
+                    var p = res.data;
+
+                    /* 頁面頂部會員卡 */
+                    document.getElementById('m-name').textContent  = p.full_name || authUser.email.split('@')[0];
+                    document.getElementById('m-email').textContent = authUser.email;
+
+                    var avatarEl = document.getElementById('m-avatar');
+                    if (p.avatar_url) {
+                        avatarEl.innerHTML = '<img src="' + p.avatar_url + '" alt="頭像">';
+                    } else {
+                        avatarEl.textContent = (p.full_name || authUser.email).charAt(0).toUpperCase();
+                    }
+
+                    /* 個人資料表單 */
+                    document.getElementById('pf-name').value   = p.full_name || '';
+                    document.getElementById('pf-gender').value = p.gender    || '';
+                    document.getElementById('pf-email').value  = authUser.email;
+                    document.getElementById('pf-phone').value  = p.phone     || '';
+
+                    var addr = '';
+                    if (Array.isArray(p.addresses) && p.addresses.length > 0) {
+                        addr = p.addresses[0].value || p.addresses[0] || '';
+                    }
+                    document.getElementById('pf-address').value = addr;
+                });
+
+            loadOrders(authUser.id);
+        }
+
+        /* ── 3. 側邊選單切換 ── */
+        document.querySelectorAll('.sidebar-item[data-section]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.sidebar-item').forEach(function (b) { b.classList.remove('active'); });
+                document.querySelectorAll('.member-section').forEach(function (s) { s.classList.remove('active'); });
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.section).classList.add('active');
+            });
+        });
+
+        /* ── 4. 儲存個人資料 ── */
+        document.getElementById('btn-save-profile').addEventListener('click', function () {
+            window.db.auth.getUser().then(function (res) {
+                if (!res.data || !res.data.user) return;
+                var uid     = res.data.user.id;
+                var name    = document.getElementById('pf-name').value.trim();
+                var gender  = document.getElementById('pf-gender').value;
+                var phone   = document.getElementById('pf-phone').value.trim();
+                var address = document.getElementById('pf-address').value.trim();
+                var addresses = address ? [{ label: '預設', value: address }] : [];
+
+                window.db.from('profiles').update({
+                    full_name:  name,
+                    gender:     gender || null,
+                    phone:      phone  || null,
+                    addresses:  addresses,
+                    updated_at: new Date().toISOString()
+                }).eq('id', uid).then(function (res2) {
+                    if (res2.error) { alert('儲存失敗：' + res2.error.message); return; }
+                    document.getElementById('m-name').textContent = name;
+                    var ok = document.getElementById('save-ok');
+                    ok.classList.add('show');
+                    setTimeout(function () { ok.classList.remove('show'); }, 2500);
+                    var u = MolosAuth.getUser();
+                    if (u) { u.name = name; MolosAuth.login(u); }
+                });
+            });
+        });
+
+        /* ── 5. 訂單載入 ── */
+        function loadOrders(uid) {
+            window.db.from('orders')
+                .select('*, order_items(*)')
+                .eq('user_id', uid)
+                .order('created_at', { ascending: false })
+                .then(function (res) {
+                    var card = document.querySelector('#sec-orders .section-card');
+                    var title = card.querySelector('h3').outerHTML;
+                    /* 清除 Demo 訂單 */
+                    card.innerHTML = title;
+
+                    if (res.error || !res.data || res.data.length === 0) {
+                        card.innerHTML += '<div class="order-empty"><i class="fas fa-box-open"></i><p>目前沒有訂單紀錄</p></div>';
+                        return;
+                    }
+
+                    var statusLabel = { processing: '處理中', shipped: '配送中', delivered: '已送達', cancelled: '已取消' };
+                    var statusClass = { processing: 'processing', shipped: 'shipped', delivered: 'delivered', cancelled: 'processing' };
+
+                    res.data.forEach(function (order) {
+                        var date      = (order.created_at || '').split('T')[0];
+                        var itemCount = (order.order_items || []).reduce(function (s, i) { return s + (i.quantity || 0); }, 0);
+                        var itemsText = itemCount > 0 ? '共 ' + itemCount + ' 件商品' : '—';
+                        var no        = order.order_no || ('#' + order.id.substring(0, 8).toUpperCase());
+                        var status    = order.status || 'processing';
+
+                        var el = document.createElement('div');
+                        el.className = 'order-card';
+                        el.innerHTML =
+                            '<div class="order-header"><div>' +
+                            '<div class="order-no">' + no + '</div>' +
+                            '<div class="order-date">' + date + '</div></div>' +
+                            '<span class="order-status ' + (statusClass[status] || 'processing') + '">' +
+                            (statusLabel[status] || status) + '</span></div>' +
+                            '<div class="order-items">' + itemsText + '</div>' +
+                            '<div class="order-footer">' +
+                            '<span class="order-total">NT$ ' + (order.total_amount || 0).toLocaleString() + '</span>' +
+                            '<button class="btn-order-detail">查看明細</button></div>';
+                        card.appendChild(el);
+                    });
+                });
+        }
+
+        /* ── 6. 修改密碼 ── */
+        document.querySelectorAll('.toggle-pw2').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var input = document.getElementById(btn.dataset.target);
+                var icon  = btn.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+        });
+
+        document.getElementById('pw-new').addEventListener('input', function () {
+            var pw = this.value;
+            var score = 0;
+            if (pw.length >= 8)          score++;
+            if (/[A-Z]/.test(pw))        score++;
+            if (/[0-9]/.test(pw))        score++;
+            if (/[^A-Za-z0-9]/.test(pw)) score++;
+            var bar   = document.getElementById('pw-strength-bar');
+            var label = document.getElementById('pw-strength-label');
+            var colors = ['', '#e74c3c', '#f39c12', '#27ae60', '#27ae60'];
+            var labels = ['', '弱', '普通', '強', '非常強'];
+            bar.style.width      = (score * 25) + '%';
+            bar.style.background = colors[score] || '';
+            label.textContent    = '密碼強度：' + (labels[score] || '—');
+        });
+
+        document.getElementById('btn-save-pw').addEventListener('click', function () {
+            var pw  = document.getElementById('pw-new').value;
+            var pw2 = document.getElementById('pw-new2').value;
+            if (pw.length < 8) { alert('新密碼至少需要 8 個字元。'); return; }
+            if (pw !== pw2)    { alert('兩次密碼不一致。');           return; }
+
+            var btn = this;
+            btn.disabled = true;
+            btn.textContent = '更新中…';
+
+            window.db.auth.updateUser({ password: pw }).then(function (res) {
+                btn.disabled = false;
+                btn.textContent = '更新密碼';
+                if (res.error) { alert('更新失敗：' + res.error.message); return; }
+                ['pw-current', 'pw-new', 'pw-new2'].forEach(function (id) {
+                    document.getElementById(id).value = '';
+                });
+                document.getElementById('pw-strength-bar').style.width = '0';
+                document.getElementById('pw-strength-label').textContent = '密碼強度：—';
+                var ok = document.getElementById('pw-save-ok');
+                ok.classList.add('show');
+                setTimeout(function () { ok.classList.remove('show'); }, 2500);
+            });
+        });
+
+        /* ── 7. 登出 ── */
+        document.getElementById('btn-logout').addEventListener('click', function () {
+            MolosAuth.logout();
+            window.location.href = 'index.html';
+        });
+
+    });
+    </script>
 </body>
 </html>

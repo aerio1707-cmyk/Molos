@@ -514,13 +514,15 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
     <script>
-    /* ── login.html 專屬互動邏輯 ── */
+    /* ── login.html 專屬互動邏輯（Supabase 版）── */
 
     var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    /* 頁籤切換 */
+    /* ── 頁籤切換 ── */
     document.querySelectorAll('.auth-tab').forEach(function(tab) {
         tab.addEventListener('click', function() {
             document.querySelectorAll('.auth-tab').forEach(function(t){ t.classList.remove('active'); });
@@ -530,7 +532,7 @@
         });
     });
 
-    /* 顯示/隱藏密碼 */
+    /* ── 顯示/隱藏密碼 ── */
     document.querySelectorAll('.toggle-pw').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var input = document.getElementById(btn.dataset.target);
@@ -545,7 +547,7 @@
         });
     });
 
-    /* 忘記密碼彈窗 */
+    /* ── 忘記密碼彈窗 ── */
     document.getElementById('forgot-link').addEventListener('click', function(e) {
         e.preventDefault();
         document.getElementById('forgot-modal').classList.add('show');
@@ -553,82 +555,130 @@
     document.getElementById('forgot-close').addEventListener('click', function() {
         document.getElementById('forgot-modal').classList.remove('show');
     });
+
     document.getElementById('btn-forgot-send').addEventListener('click', function() {
         var email = document.getElementById('forgot-email').value.trim();
         if (!EMAIL_RE.test(email)) {
             document.getElementById('forgot-email').classList.add('is-error');
             return;
         }
-        /* Demo：假裝寄送成功 */
-        document.querySelector('#forgot-modal .modal-box-inner').innerHTML =
-            '<div class="modal-icon" style="background:#eafaf1;"><i class="fas fa-check" style="color:#27ae60;"></i></div>' +
-            '<h3>已寄出！</h3>' +
-            '<p>請至 <strong>' + email + '</strong><br>收取密碼重設信件。</p>' +
-            '<button class="btn-auth" style="background:#27ae60;" onclick="document.getElementById(\'forgot-modal\').classList.remove(\'show\')">' +
-            '<i class="fas fa-check" style="margin-right:8px;"></i>確認</button>';
+        var btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spin-icon"></span>寄送中…';
+
+        window.db.auth.resetPasswordForEmail(email, {
+            redirectTo: 'https://dev.molos.pages.dev/login.html'
+        }).then(function(res) {
+            if (res.error) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i>寄送重設連結';
+                alert('寄送失敗：' + res.error.message);
+                return;
+            }
+            document.querySelector('#forgot-modal .modal-box-inner').innerHTML =
+                '<div class="modal-icon" style="background:#eafaf1;"><i class="fas fa-check" style="color:#27ae60;"></i></div>' +
+                '<h3>已寄出！</h3>' +
+                '<p>請至 <strong>' + email + '</strong><br>收取密碼重設信件。</p>' +
+                '<button class="btn-auth" style="background:#27ae60;" onclick="document.getElementById(\'forgot-modal\').classList.remove(\'show\')">' +
+                '<i class="fas fa-check" style="margin-right:8px;"></i>確認</button>';
+        });
     });
 
-    /* 社群登入 Demo */
+    /* ── 密碼重設回調（信中連結點擊後回到此頁）── */
+    document.addEventListener('molos:password-recovery', function() {
+        var backdrop = document.getElementById('forgot-modal');
+        backdrop.classList.add('show');
+        document.querySelector('#forgot-modal .modal-box-inner').innerHTML =
+            '<div class="modal-icon"><i class="fas fa-lock"></i></div>' +
+            '<h3>設定新密碼</h3>' +
+            '<p style="color:#999;font-size:0.88rem;margin-bottom:16px;">請輸入您的新密碼（至少 8 個字元）。</p>' +
+            '<div class="field-wrap" style="margin-bottom:12px;">' +
+            '<input type="password" id="reset-pw1" placeholder="新密碼" style="padding:12px 14px;"></div>' +
+            '<div class="field-wrap" style="margin-bottom:16px;">' +
+            '<input type="password" id="reset-pw2" placeholder="再次輸入新密碼" style="padding:12px 14px;"></div>' +
+            '<p id="reset-pw-err" style="color:#e74c3c;font-size:0.82rem;display:none;margin-bottom:12px;"></p>' +
+            '<button class="btn-auth" id="btn-reset-confirm">' +
+            '<i class="fas fa-check" style="margin-right:8px;"></i>確認更新密碼</button>';
+
+        document.getElementById('btn-reset-confirm').addEventListener('click', function() {
+            var pw1 = document.getElementById('reset-pw1').value;
+            var pw2 = document.getElementById('reset-pw2').value;
+            var errEl = document.getElementById('reset-pw-err');
+            if (pw1.length < 8) { errEl.textContent = '密碼至少 8 個字元'; errEl.style.display = 'block'; return; }
+            if (pw1 !== pw2)    { errEl.textContent = '兩次密碼不一致';     errEl.style.display = 'block'; return; }
+            errEl.style.display = 'none';
+            var btn = this;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spin-icon"></span>更新中…';
+            window.db.auth.updateUser({ password: pw1 }).then(function(res) {
+                if (res.error) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check" style="margin-right:8px;"></i>確認更新密碼';
+                    errEl.textContent = '更新失敗：' + res.error.message;
+                    errEl.style.display = 'block';
+                    return;
+                }
+                document.querySelector('#forgot-modal .modal-box-inner').innerHTML =
+                    '<div class="modal-icon" style="background:#eafaf1;"><i class="fas fa-check" style="color:#27ae60;"></i></div>' +
+                    '<h3>密碼已更新！</h3><p>請使用新密碼重新登入。</p>' +
+                    '<button class="btn-auth" style="background:#27ae60;" ' +
+                    'onclick="document.getElementById(\'forgot-modal\').classList.remove(\'show\')">前往登入</button>';
+            });
+        });
+    });
+
+    /* ── 社群登入 ── */
     function handleSocialLogin(provider) {
-        document.getElementById('social-modal-title').textContent = provider + ' 登入';
-        document.getElementById('social-modal-desc').textContent =
-            '實際部署時將跳轉至 ' + provider + ' 授權頁面。\n目前為 UI 展示模式。';
-        document.getElementById('social-modal').classList.add('show');
+        if (provider === 'Google') {
+            window.db.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: 'https://dev.molos.pages.dev/member.html' }
+            });
+        } else {
+            document.getElementById('social-modal-title').textContent = provider + ' 登入';
+            document.getElementById('social-modal-desc').textContent =
+                provider + ' 登入尚未開放，請使用 Email 或 Google 帳號登入。';
+            document.getElementById('social-modal').classList.add('show');
+        }
     }
     document.getElementById('social-close').addEventListener('click', function() {
         document.getElementById('social-modal').classList.remove('show');
     });
 
-    /* Demo 登入（模擬成功） */
-    function demoLogin() {
-        var mockUser = {
-            name:   'Demo 會員',
-            email:  'demo@molos.com.tw',
-            avatar: '',
-            via:    'demo'
-        };
-        MolosAuth.login(mockUser);
-        window.location.href = 'member.html';
-    }
-
-    /* ── Email 登入表單 ── */
+    /* ── Email 登入 ── */
     document.getElementById('login-form').addEventListener('submit', function(e) {
         e.preventDefault();
         var email = document.getElementById('login-email').value.trim();
         var pw    = document.getElementById('login-pw').value;
-        var ok = true;
 
-        if (!EMAIL_RE.test(email)) {
-            document.getElementById('login-email').classList.add('is-error');
-            document.getElementById('err-login-email').classList.add('show');
-            ok = false;
-        } else {
-            document.getElementById('login-email').classList.remove('is-error');
-            document.getElementById('err-login-email').classList.remove('show');
-        }
-        if (!pw) {
-            document.getElementById('login-pw').classList.add('is-error');
-            document.getElementById('err-login-pw').classList.add('show');
-            ok = false;
-        } else {
-            document.getElementById('login-pw').classList.remove('is-error');
-            document.getElementById('err-login-pw').classList.remove('show');
-        }
-        if (!ok) return;
+        setFieldErr('login-email', 'err-login-email', EMAIL_RE.test(email));
+        setFieldErr('login-pw',    'err-login-pw',    pw.length > 0);
+        if (!EMAIL_RE.test(email) || !pw) return;
 
-        /* Demo：直接登入成功 */
         var btn = document.getElementById('btn-login');
         btn.disabled = true;
-        btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;"></span>登入中…';
+        btn.innerHTML = '<span class="spin-icon"></span>登入中…';
 
-        setTimeout(function() {
-            var name = email.split('@')[0];
-            MolosAuth.login({ name: name, email: email, avatar: '', via: 'email' });
-            window.location.href = 'member.html';
-        }, 1000);
+        window.db.auth.signInWithPassword({ email: email, password: pw })
+            .then(function(res) {
+                if (res.error) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>登入';
+                    var msg = res.error.message;
+                    if (msg.indexOf('Invalid login credentials') !== -1) {
+                        showFormMsg('panel-login', '帳號或密碼錯誤，請重新確認。');
+                    } else if (msg.indexOf('Email not confirmed') !== -1) {
+                        showFormMsg('panel-login', '請先至信箱點擊驗證連結，完成驗證後再登入。');
+                    } else {
+                        showFormMsg('panel-login', '登入失敗：' + msg);
+                    }
+                    return;
+                }
+                window.location.href = 'member.html';
+            });
     });
 
-    /* ── Email 註冊表單 ── */
+    /* ── Email 註冊 ── */
     document.getElementById('register-form').addEventListener('submit', function(e) {
         e.preventDefault();
         var name  = document.getElementById('reg-name').value.trim();
@@ -638,37 +688,87 @@
         var terms = document.getElementById('agree-terms').checked;
         var ok = true;
 
-        function setErr(inputId, errId, cond) {
+        function chk(inputId, errId, cond) {
             document.getElementById(inputId).classList.toggle('is-error', !cond);
             document.getElementById(errId).classList.toggle('show', !cond);
             if (!cond) ok = false;
         }
-
-        setErr('reg-name',  'err-reg-name',  name.length >= 2);
-        setErr('reg-email', 'err-reg-email', EMAIL_RE.test(email));
-        setErr('reg-pw',    'err-reg-pw',    pw.length >= 8);
-        setErr('reg-pw2',   'err-reg-pw2',   pw2 === pw && pw2 !== '');
+        chk('reg-name',  'err-reg-name',  name.length >= 2);
+        chk('reg-email', 'err-reg-email', EMAIL_RE.test(email));
+        chk('reg-pw',    'err-reg-pw',    pw.length >= 8);
+        chk('reg-pw2',   'err-reg-pw2',   pw2 === pw && pw2 !== '');
         document.getElementById('err-terms').classList.toggle('show', !terms);
         if (!terms) ok = false;
-
         if (!ok) return;
 
         var btn = document.getElementById('btn-register');
         btn.disabled = true;
-        btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;"></span>建立帳號中…';
+        btn.innerHTML = '<span class="spin-icon"></span>建立帳號中…';
 
-        setTimeout(function() {
-            MolosAuth.login({ name: name, email: email, avatar: '', via: 'email' });
-            window.location.href = 'member.html';
-        }, 1000);
+        window.db.auth.signUp({
+            email: email,
+            password: pw,
+            options: { data: { full_name: name } }
+        }).then(function(res) {
+            if (res.error) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>立即註冊';
+                var msg = res.error.message;
+                if (msg.indexOf('already') !== -1) {
+                    showFormMsg('panel-register', '此 Email 已被註冊，請直接登入或使用「忘記密碼」。');
+                } else {
+                    showFormMsg('panel-register', '註冊失敗：' + msg);
+                }
+                return;
+            }
+            showRegisterSuccess(email);
+        });
     });
 
-    /* 點彈窗背景關閉 */
-    ['forgot-modal','social-modal'].forEach(function(id) {
+    /* ── Helper：欄位錯誤切換 ── */
+    function setFieldErr(inputId, errId, isOk) {
+        document.getElementById(inputId).classList.toggle('is-error', !isOk);
+        document.getElementById(errId).classList.toggle('show', !isOk);
+    }
+
+    /* ── Helper：面板錯誤提示 ── */
+    function showFormMsg(panelId, msg) {
+        var panel = document.getElementById(panelId);
+        var ex = panel.querySelector('.form-alert');
+        if (ex) ex.remove();
+        var p = document.createElement('p');
+        p.className = 'form-alert';
+        p.style.cssText = 'color:#e74c3c;font-size:0.85rem;margin:-8px 0 14px;text-align:center;';
+        p.textContent = msg;
+        panel.insertBefore(p, panel.querySelector('.btn-auth'));
+    }
+
+    /* ── 註冊成功：顯示驗證提示 ── */
+    function showRegisterSuccess(email) {
+        document.getElementById('panel-register').innerHTML =
+            '<div style="text-align:center;padding:16px 0;">' +
+            '<div style="width:64px;height:64px;background:#eafaf1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">' +
+            '<i class="fas fa-envelope" style="font-size:1.6rem;color:#27ae60;"></i></div>' +
+            '<h3 style="color:var(--text-dark);margin-bottom:8px;">請驗證您的 Email</h3>' +
+            '<p style="color:#999;font-size:0.9rem;line-height:1.8;">驗證信已寄至<br>' +
+            '<strong style="color:var(--text-dark);">' + email + '</strong><br><br>' +
+            '請點擊信中連結完成驗證，<br>驗證後即可登入。</p>' +
+            '<button class="btn-auth" style="margin-top:24px;" ' +
+            'onclick="document.querySelector(\'[data-target=panel-login]\').click()">' +
+            '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>前往登入</button></div>';
+    }
+
+    /* ── 點彈窗背景關閉 ── */
+    ['forgot-modal', 'social-modal'].forEach(function(id) {
         document.getElementById(id).addEventListener('click', function(e) {
             if (e.target === this) this.classList.remove('show');
         });
     });
+
+    /* ── spin 動畫 CSS ── */
+    var s = document.createElement('style');
+    s.textContent = '.spin-icon{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:_spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;}@keyframes _spin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(s);
     </script>
 </body>
 </html>
