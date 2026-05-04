@@ -477,9 +477,10 @@
                 <div class="modal-icon"><i class="fas fa-key"></i></div>
                 <h3>重設密碼</h3>
                 <p>請輸入您的帳號 Email，<br>我們將寄送重設連結至您的信箱。</p>
-                <div class="field-wrap" style="margin-bottom:16px;">
+                <div class="field-wrap" style="margin-bottom:8px;">
                     <input type="email" id="forgot-email" placeholder="your@email.com">
                 </div>
+                <p id="forgot-err-msg" style="display:none;color:#e74c3c;font-size:0.82rem;margin:0 0 12px;text-align:center;line-height:1.6;"></p>
                 <button class="btn-auth" id="btn-forgot-send">
                     <i class="fas fa-paper-plane" style="margin-right:8px;"></i>寄送重設連結
                 </button>
@@ -546,9 +547,16 @@
             if (res.error) {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i>寄送重設連結';
-                alert('寄送失敗：' + res.error.message);
+                var errEl = document.getElementById('forgot-err-msg');
+                if (res.error.message.indexOf('Error sending recovery email') !== -1) {
+                    errEl.innerHTML = '此帳號是以 <strong>Google 帳號</strong> 登入，<br>不需要密碼重設。<br>請直接使用 Google 登入按鈕登入。';
+                } else {
+                    errEl.textContent = '寄送失敗，請確認 Email 是否正確。';
+                }
+                errEl.style.display = 'block';
                 return;
             }
+            document.getElementById('forgot-err-msg').style.display = 'none';
             document.querySelector('#forgot-modal .modal-box-inner').innerHTML =
                 '<div class="modal-icon" style="background:#eafaf1;"><i class="fas fa-check" style="color:#27ae60;"></i></div>' +
                 '<h3>已寄出！</h3>' +
