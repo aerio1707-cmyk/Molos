@@ -360,14 +360,6 @@
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
                             以 Google 帳號登入
                         </button>
-                        <button class="btn-social facebook" onclick="handleSocialLogin('Facebook')">
-                            <i class="fab fa-facebook fa"></i>
-                            以 Facebook 帳號登入
-                        </button>
-                        <button class="btn-social line" onclick="handleSocialLogin('LINE')">
-                            <i class="fab fa-line fa"></i>
-                            以 LINE 帳號登入
-                        </button>
                     </div>
 
                     <div class="divider">或用 Email 登入</div>
@@ -413,10 +405,6 @@
                         <button class="btn-social google" onclick="handleSocialLogin('Google')">
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
                             以 Google 帳號快速註冊
-                        </button>
-                        <button class="btn-social facebook" onclick="handleSocialLogin('Facebook')">
-                            <i class="fab fa-facebook fa"></i>
-                            以 Facebook 帳號快速註冊
                         </button>
                     </div>
 
@@ -499,20 +487,6 @@
         </div>
     </div>
 
-    <!-- 社群登入提示彈窗（UI Demo） -->
-    <div class="modal-backdrop" id="social-modal">
-        <div class="modal-box">
-            <div class="modal-box-inner">
-                <button class="modal-close-btn" id="social-close"><i class="fas fa-times"></i></button>
-                <div class="modal-icon"><i class="fas fa-plug"></i></div>
-                <h3 id="social-modal-title">社群登入</h3>
-                <p id="social-modal-desc">此功能串接後端後即可使用。<br>目前為 UI 展示模式。</p>
-                <button class="btn-auth" onclick="demoLogin()">
-                    <i class="fas fa-flask" style="margin-right:8px;"></i>體驗 Demo 登入
-                </button>
-            </div>
-        </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/main.js"></script>
@@ -634,16 +608,8 @@
                 provider: 'google',
                 options: { redirectTo: 'https://dev.molos.pages.dev/member.html' }
             });
-        } else {
-            document.getElementById('social-modal-title').textContent = provider + ' 登入';
-            document.getElementById('social-modal-desc').textContent =
-                provider + ' 登入尚未開放，請使用 Email 或 Google 帳號登入。';
-            document.getElementById('social-modal').classList.add('show');
         }
     }
-    document.getElementById('social-close').addEventListener('click', function() {
-        document.getElementById('social-modal').classList.remove('show');
-    });
 
     /* ── Email 登入 ── */
     document.getElementById('login-form').addEventListener('submit', function(e) {
@@ -759,10 +725,8 @@
     }
 
     /* ── 點彈窗背景關閉 ── */
-    ['forgot-modal', 'social-modal'].forEach(function(id) {
-        document.getElementById(id).addEventListener('click', function(e) {
-            if (e.target === this) this.classList.remove('show');
-        });
+    document.getElementById('forgot-modal').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('show');
     });
 
     /* ── spin 動畫 CSS ── */

@@ -109,6 +109,7 @@
         <section class="product-info-tabs">
             <div class="tab-header">
                 <button class="tab-btn active" onclick="openTab(event,'tab1')">產品特色</button>
+                <button class="tab-btn" onclick="openTab(event,'tab-info')">產品資訊</button>
                 <button class="tab-btn" onclick="openTab(event,'tab2')">食用建議</button>
                 <button class="tab-btn" onclick="openTab(event,'tab3')">檢驗報告</button>
             </div>
@@ -131,6 +132,23 @@
                         <div class="feature-icon"><img src="../images/icons/feat-natural.png" alt="換季推薦"></div>
                         <div class="feature-info"><h4>換季壓力首選</h4><p>換季、手術後或環境改變造成免疫壓力時，加強補充效果尤為顯著，幫助毛孩快速恢復。</p></div>
                     </div>
+                </div>
+            </div>
+
+            <div id="tab-info" class="tab-content">
+                <div class="product-info-section">
+                    <p class="product-info-desc">以下為各系列產品的完整成份與營養分析資訊，點擊圖片可放大查看。</p>
+                    <div class="product-info-img-wrap" onclick="openLightbox('../images/products/product-ingredients.jpg', '毛樂適系列 — 產品成份與營養分析')">
+                        <img src="../images/products/product-ingredients.jpg" alt="產品成份與營養分析">
+                        <div class="product-info-img-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>點擊放大查看完整資訊</span>
+                        </div>
+                    </div>
+                    <p class="product-info-notice">
+                        <i class="fas fa-info-circle"></i>
+                        如需進一步了解產品成份，歡迎聯繫我們的客服團隊。
+                    </p>
                 </div>
             </div>
 

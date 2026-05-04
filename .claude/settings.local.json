@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/Aerio/.claude/projects/c--Users-Aerio-Desktop-MyWeb-Molos/memory//**)",
-      "Read(//c/Users/Aerio/.claude/projects/c--Users-Aerio-Desktop-MyWeb-Molos/memory/**)"
+      "Read(//c/Users/Aerio/.claude/projects/c--Users-Aerio-Desktop-MyWeb-Molos/memory/**)",
+      "Bash(cp \"/c/Users/Aerio/Desktop/S__555434031_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/skin-care-feature-01.jpg\")",
+      "Bash(cp \"/c/Users/Aerio/Desktop/S__555434032_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/skin-care-feature-02.jpg\")",
+      "Bash(cp \"/c/Users/Aerio/Desktop/S__555434033_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/skin-care-feature-03.jpg\")",
+      "Bash(cp \"/c/Users/Aerio/Desktop/S__555434034_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/skin-care-feature-04.jpg\")",
+      "Bash(cp \"/c/Users/Aerio/Desktop/S__555434035_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/product-ingredients.jpg\")"
     ]
   }
 }
