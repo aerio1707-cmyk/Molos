@@ -3152,3 +3152,32 @@ body.menu-open {
         opacity: 1;
     }
 }
+
+/* ============================================================
+   Desktop override: 柔膚力產品特色 — 直式單欄直接顯示
+   ============================================================ */
+@media (min-width: 769px) {
+    .skin-feature-cards {
+        grid-template-columns: 1fr;
+        max-width: 640px;
+        margin: 0 auto;
+        gap: 40px;
+    }
+
+    .skin-feature-img-card {
+        cursor: default;
+    }
+
+    .skin-feature-img-card:hover {
+        transform: none;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+    }
+
+    .skin-feature-img-card:hover img {
+        transform: none;
+    }
+
+    .skin-feature-img-overlay {
+        display: none;
+    }
+}
