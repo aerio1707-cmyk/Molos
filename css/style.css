@@ -1764,6 +1764,7 @@ body.menu-open {
     .product-feature-list li {
         padding: 4px 0;
         font-size: 0.95rem;
+        word-break: keep-all;
     }
 
     /* 報告區塊：直排 */
