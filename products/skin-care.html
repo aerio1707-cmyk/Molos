@@ -109,66 +109,17 @@
         <section class="product-info-tabs">
             <div class="tab-header">
                 <button class="tab-btn active" onclick="openTab(event,'tab1')">產品特色</button>
-                <button class="tab-btn" onclick="openTab(event,'tab-info')">產品資訊</button>
                 <button class="tab-btn" onclick="openTab(event,'tab2')">食用建議</button>
                 <button class="tab-btn" onclick="openTab(event,'tab3')">檢驗報告</button>
             </div>
 
             <div id="tab1" class="tab-content active">
-                <div class="skin-feature-gallery">
-                    <p class="skin-feature-intro">點擊下方圖片，深入了解柔膚力的配方亮點與設計理念。</p>
-                    <div class="skin-feature-cards">
-                        <div class="skin-feature-img-card" onclick="openLightbox('../images/products/skin-care-feature-01.jpg', '柔膚力 — 產品介紹')">
-                            <img src="../images/products/skin-care-feature-01.jpg" alt="柔膚力產品介紹">
-                            <div class="skin-feature-img-overlay">
-                                <i class="fas fa-search-plus"></i>
-                                <span>點擊放大查看</span>
-                            </div>
-                            <div class="skin-feature-img-label">
-                                <h4>產品介紹</h4>
-                                <p>毛樂適柔膚力 — 專注毛孩肌膚健康管理，三重循環保養配方</p>
-                            </div>
-                        </div>
-                        <div class="skin-feature-img-card" onclick="openLightbox('../images/products/skin-care-feature-02.jpg', '柔膚力 — 關鍵營養')">
-                            <img src="../images/products/skin-care-feature-02.jpg" alt="柔膚力關鍵營養">
-                            <div class="skin-feature-img-overlay">
-                                <i class="fas fa-search-plus"></i>
-                                <span>點擊放大查看</span>
-                            </div>
-                            <div class="skin-feature-img-label">
-                                <h4>關鍵營養</h4>
-                                <p>神經醯胺 × H61乳酸球菌 × Omega-3，一條補足肌膚保健關鍵營養</p>
-                            </div>
-                        </div>
-                        <div class="skin-feature-img-card" onclick="openLightbox('../images/products/skin-care-feature-03.jpg', '柔膚力 — 三重循環保養')">
-                            <img src="../images/products/skin-care-feature-03.jpg" alt="三重循環保養">
-                            <div class="skin-feature-img-overlay">
-                                <i class="fas fa-search-plus"></i>
-                                <span>點擊放大查看</span>
-                            </div>
-                            <div class="skin-feature-img-label">
-                                <h4>三重循環保養</h4>
-                                <p>皮膚、體內、毛髮一起照顧，才是完整照顧</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-info" class="tab-content">
-                <div class="product-info-section">
-                    <p class="product-info-desc">以下為各系列產品的完整成份與營養分析資訊，點擊圖片可放大查看。</p>
-                    <div class="product-info-img-wrap" onclick="openLightbox('../images/products/product-ingredients.jpg', '毛樂適系列 — 產品成份與營養分析')">
-                        <img src="../images/products/product-ingredients.jpg" alt="產品成份與營養分析">
-                        <div class="product-info-img-overlay">
-                            <i class="fas fa-search-plus"></i>
-                            <span>點擊放大查看完整資訊</span>
-                        </div>
-                    </div>
-                    <p class="product-info-notice">
-                        <i class="fas fa-info-circle"></i>
-                        如需進一步了解產品成份，歡迎聯繫我們的客服團隊。
-                    </p>
+                <div class="skin-feature-sequential">
+                    <img src="../images/products/skin-care-feature-01.jpg" alt="柔膚力產品介紹">
+                    <img src="../images/products/skin-care-feature-02.jpg" alt="柔膚力關鍵營養">
+                    <img src="../images/products/skin-care-feature-03.jpg" alt="三重循環保養">
+                    <img src="../images/products/skin-care-feature-04.jpg" alt="為什麼毛爸媽都喜歡柔膚力">
+                    <img src="../images/products/product-ingredients.jpg" alt="產品成份與營養分析">
                 </div>
             </div>
 
@@ -228,34 +179,6 @@
             </div>
         </section>
 
-        <!-- 毛爸媽都說讚 -->
-        <section class="why-love-section">
-            <div class="why-love-header">
-                <div class="why-love-deco"></div>
-                <h2>毛爸媽都說讚</h2>
-                <p>看看為什麼這麼多毛孩家長選擇柔膚力</p>
-            </div>
-            <div class="why-love-content">
-                <div class="why-love-img-wrap" onclick="openLightbox('../images/products/skin-care-feature-04.jpg', '為什麼毛爸媽都喜歡柔膚力？')">
-                    <img src="../images/products/skin-care-feature-04.jpg" alt="為什麼毛爸媽都喜歡柔膚力">
-                    <div class="why-love-img-overlay">
-                        <i class="fas fa-search-plus"></i>
-                        <span>點擊放大查看</span>
-                    </div>
-                </div>
-                <div class="why-love-cta">
-                    <p>準備好讓毛孩的狀態慢慢變好了嗎？</p>
-                    <button class="btn-primary btn-add-cart"
-                        data-id="skin-care"
-                        data-name="柔膚力（鱈魚+鴨肉）"
-                        data-price="780"
-                        data-img="../images/products/skin-care.png"
-                        data-qty-input="qty-skin">
-                        <i class="fas fa-shopping-cart" style="margin-right:8px;"></i>立即加入購物車
-                    </button>
-                </div>
-            </div>
-        </section>
     </main>
 
     <div id="pawiLightbox" class="modal" onclick="closeLightbox()">
