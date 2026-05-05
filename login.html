@@ -688,14 +688,28 @@
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>立即註冊';
                 var msg = res.error.message;
-                if (msg.indexOf('already') !== -1) {
+                if (msg.indexOf('already') !== -1 || msg.indexOf('registered') !== -1) {
                     showFormMsg('panel-register', '此 Email 已被註冊，請直接登入或使用「忘記密碼」。');
+                } else if (msg.indexOf('rate') !== -1 || msg.indexOf('429') !== -1 || msg.indexOf('exceeded') !== -1 || msg.indexOf('too many') !== -1) {
+                    showFormMsg('panel-register', '驗證信寄送次數過多，請稍候幾分鐘再試。');
                 } else {
                     showFormMsg('panel-register', '註冊失敗：' + msg);
                 }
                 return;
             }
+            /* Supabase 在 Email 已存在（未驗證）時回傳 user.identities = [] 而非 error */
+            if (res.data && res.data.user && res.data.user.identities && res.data.user.identities.length === 0) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>立即註冊';
+                showFormMsg('panel-register', '此 Email 已被註冊但尚未驗證。請至信箱確認，或點擊下方重新寄送。');
+                showResendOption(email);
+                return;
+            }
             showRegisterSuccess(email);
+        }).catch(function() {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>立即註冊';
+            showFormMsg('panel-register', '網路連線異常，請確認網路後再試。');
         });
     });
 
@@ -726,10 +740,52 @@
             '<h3 style="color:var(--text-dark);margin-bottom:8px;">請驗證您的 Email</h3>' +
             '<p style="color:#999;font-size:0.9rem;line-height:1.8;">驗證信已寄至<br>' +
             '<strong style="color:var(--text-dark);">' + email + '</strong><br><br>' +
-            '請點擊信中連結完成驗證，<br>驗證後即可登入。</p>' +
-            '<button class="btn-auth" style="margin-top:24px;" ' +
+            '請點擊信中連結完成驗證，<br>驗證後即可登入。<br>' +
+            '<span style="font-size:0.82rem;">若未收到，請先檢查垃圾郵件資料夾。</span></p>' +
+            '<button class="btn-auth" id="btn-resend-success" style="margin-top:16px;background:#f0f0f0;color:#666;box-shadow:none;" ' +
+            'onclick="handleResendEmail(\'' + email + '\', this)">' +
+            '<i class="fas fa-redo" style="margin-right:8px;"></i>重新寄送驗證信</button>' +
+            '<button class="btn-auth" style="margin-top:10px;" ' +
             'onclick="document.querySelector(\'[data-target=panel-login]\').click()">' +
             '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>前往登入</button></div>';
+    }
+
+    /* ── 已存在未驗證帳號：顯示重寄選項 ── */
+    function showResendOption(email) {
+        var panel = document.getElementById('panel-register');
+        var ex = panel.querySelector('.resend-option');
+        if (ex) return;
+        var div = document.createElement('div');
+        div.className = 'resend-option';
+        div.style.cssText = 'text-align:center;margin-top:8px;';
+        div.innerHTML = '<button class="btn-auth" style="background:#f0f0f0;color:#666;box-shadow:none;font-size:0.85rem;padding:10px;" ' +
+            'onclick="handleResendEmail(\'' + email + '\', this)">' +
+            '<i class="fas fa-redo" style="margin-right:6px;"></i>重新寄送驗證信</button>';
+        panel.appendChild(div);
+    }
+
+    /* ── 重新寄送驗證信 ── */
+    function handleResendEmail(email, btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spin-icon"></span>寄送中…';
+        window.db.auth.resend({ type: 'signup', email: email })
+            .then(function(res) {
+                if (res.error) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-redo" style="margin-right:6px;"></i>重新寄送驗證信';
+                    alert('寄送失敗：' + res.error.message);
+                    return;
+                }
+                btn.innerHTML = '<i class="fas fa-check" style="margin-right:6px;"></i>已重新寄出！';
+                setTimeout(function() {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-redo" style="margin-right:6px;"></i>重新寄送驗證信';
+                }, 30000);
+            }).catch(function() {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-redo" style="margin-right:6px;"></i>重新寄送驗證信';
+                alert('網路異常，請稍後再試。');
+            });
     }
 
     /* ── 點彈窗背景關閉 ── */
