@@ -1756,15 +1756,22 @@ body.menu-open {
         text-align: center;
     }
 
-    /* 產品特色清單：手機版行高收緊 */
+    /* 產品特色清單：手機版行高收緊 + 換行對齊 */
     .product-feature-list {
         line-height: 1.8 !important;
     }
 
     .product-feature-list li {
+        display: flex;
+        align-items: flex-start;
         padding: 4px 0;
         font-size: 0.95rem;
         word-break: keep-all;
+    }
+
+    .product-feature-list li i {
+        flex-shrink: 0;
+        margin-top: 4px;
     }
 
     /* 報告區塊：直排 */
