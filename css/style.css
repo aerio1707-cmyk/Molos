@@ -1741,11 +1741,29 @@ body.menu-open {
         transform: rotate(90deg);
     }
 
-    /* 頁籤文字縮小 */
+    /* 頁籤：不折行、平均分配寬度 */
+    .tab-header {
+        justify-content: space-between;
+        gap: 0;
+    }
+
     .tab-btn {
+        flex: 1;
+        font-size: 0.9rem;
+        padding: 12px 4px;
+        margin-right: 0;
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    /* 產品特色清單：手機版行高收緊 */
+    .product-feature-list {
+        line-height: 1.8 !important;
+    }
+
+    .product-feature-list li {
+        padding: 4px 0;
         font-size: 0.95rem;
-        padding: 12px 8px;
-        margin-right: 8px;
     }
 
     /* 報告區塊：直排 */

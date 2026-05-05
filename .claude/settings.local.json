@@ -7,7 +7,10 @@
       "Bash(cp \"/c/Users/Aerio/Desktop/S__555434032_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/skin-care-feature-02.jpg\")",
       "Bash(cp \"/c/Users/Aerio/Desktop/S__555434033_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/skin-care-feature-03.jpg\")",
       "Bash(cp \"/c/Users/Aerio/Desktop/S__555434034_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/skin-care-feature-04.jpg\")",
-      "Bash(cp \"/c/Users/Aerio/Desktop/S__555434035_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/product-ingredients.jpg\")"
+      "Bash(cp \"/c/Users/Aerio/Desktop/S__555434035_0.jpg\" \"/c/Users/Aerio/Desktop/MyWeb/Molos/images/products/product-ingredients.jpg\")",
+      "Bash(grep -v \"^\\\\s*//\")",
+      "Bash(awk -F: '{if \\($2 < 1800\\) print}')",
+      "Bash(awk -F: '{if \\($2 >= 1530 && $2 <= 1810\\) print}')"
     ]
   }
 }
