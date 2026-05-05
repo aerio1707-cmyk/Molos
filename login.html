@@ -660,10 +660,11 @@
                 if (res.error) {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>登入';
-                    var msg = res.error.message;
-                    if (msg.indexOf('Invalid login credentials') !== -1) {
+                    var msg = res.error.message || '';
+                    var code = res.error.code || '';
+                    if (msg.indexOf('Invalid login credentials') !== -1 || code === 'invalid_credentials') {
                         showFormMsg('panel-login', '帳號或密碼錯誤，請重新確認。');
-                    } else if (msg.indexOf('Email not confirmed') !== -1) {
+                    } else if (msg.indexOf('Email not confirmed') !== -1 || code === 'email_not_confirmed') {
                         showFormMsg('panel-login', '請先至信箱點擊驗證連結，完成驗證後再登入。');
                     } else {
                         showFormMsg('panel-login', '登入失敗：' + msg);
@@ -750,7 +751,12 @@
         p.className = 'form-alert';
         p.style.cssText = 'color:#e74c3c;font-size:0.85rem;margin:-8px 0 14px;text-align:center;';
         p.textContent = msg;
-        panel.insertBefore(p, panel.querySelector('.btn-auth'));
+        var btnAuth = panel.querySelector('.btn-auth');
+        if (btnAuth) {
+            btnAuth.parentNode.insertBefore(p, btnAuth);
+        } else {
+            panel.appendChild(p);
+        }
     }
 
     /* ── 註冊成功：顯示驗證提示 ── */
