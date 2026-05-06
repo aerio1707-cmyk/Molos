@@ -72,7 +72,7 @@ window.CartManager = (function () {
                 var overlay = document.getElementById('cartOverlay');
                 if (overlay) overlay.classList.add('active');
                 document.body.classList.add('menu-open');
-            } else if (path.indexOf('cart.html') !== -1) {
+            } else if (document.getElementById('cartCheckoutPageBtn')) {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 var inSub = path.indexOf('/products/') !== -1 || path.indexOf('/news/') !== -1;
