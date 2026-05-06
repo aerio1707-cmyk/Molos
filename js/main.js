@@ -211,16 +211,20 @@ document.addEventListener('DOMContentLoaded', function () {
     if (cartClose)   cartClose.addEventListener('click', closeCart);
     if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
-    /* --- 前往結帳 --- */
+    /* --- 前往結帳（未登入則先導向登入頁，登入後自動跳回結帳）--- */
     var checkoutBtn = document.querySelector('.cart-checkout-btn');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', function () {
             var path = window.location.pathname;
             var inSubfolder = path.indexOf('/products/') !== -1 ||
                               path.indexOf('/news/')     !== -1;
-            window.location.href = inSubfolder
-                ? '../checkout-maintenance.html'
-                : 'checkout-maintenance.html';
+            var prefix = inSubfolder ? '../' : '';
+
+            if (!MolosAuth.isLoggedIn()) {
+                window.location.href = prefix + 'login.html?next=checkout';
+            } else {
+                window.location.href = prefix + 'checkout-maintenance.html';
+            }
         });
     }
 

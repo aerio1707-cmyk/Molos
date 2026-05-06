@@ -496,7 +496,8 @@
     <script>
     /* ── login.html 專屬互動邏輯（Supabase 版）── */
 
-    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var EMAIL_RE  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var _nextPage = new URLSearchParams(window.location.search).get('next');
 
     /* ── 頁籤切換 ── */
     document.querySelectorAll('.auth-tab').forEach(function(tab) {
@@ -672,7 +673,7 @@
                     }
                     return;
                 }
-                window.location.href = 'member.html';
+                window.location.href = (_nextPage === 'checkout') ? 'checkout-maintenance.html' : 'member.html';
             });
     });
 

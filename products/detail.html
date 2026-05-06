@@ -225,6 +225,22 @@
         </div>
         <div class="footer-copy">&copy; 2026 Molos 毛樂適寵物營養專家 版權所有</div>
     </footer>
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> 購物車</h3>
+            <button class="cart-close" id="cartClose" aria-label="關閉購物車"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <div class="cart-empty" id="cartEmpty"><i class="fas fa-box-open"></i><p>購物車是空的</p></div>
+            <ul class="cart-item-list" id="cartItemList"></ul>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display:none;">
+            <div class="cart-total"><span>合計</span><span class="cart-total-price" id="cartTotalPrice">NT$ 0</span></div>
+            <button class="btn-primary cart-checkout-btn"><i class="fas fa-lock" style="margin-right:8px;"></i>前往結帳</button>
+        </div>
+    </aside>
+
     <script src="../js/cart.js"></script>
     <script src="../js/main.js"></script>
 </body>
