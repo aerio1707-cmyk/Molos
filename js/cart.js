@@ -65,14 +65,16 @@ window.CartManager = (function () {
         if (!navCartBtn) return;
 
         navCartBtn.addEventListener('click', function () {
+            var path    = window.location.pathname;
             var sidebar = document.getElementById('cartSidebar');
             if (sidebar) {
                 sidebar.classList.add('active');
                 var overlay = document.getElementById('cartOverlay');
                 if (overlay) overlay.classList.add('active');
                 document.body.classList.add('menu-open');
+            } else if (path.indexOf('cart.html') !== -1) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                var path = window.location.pathname;
                 var inSub = path.indexOf('/products/') !== -1 || path.indexOf('/news/') !== -1;
                 window.location.href = inSub ? '../cart.html' : 'cart.html';
             }
