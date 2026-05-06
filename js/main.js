@@ -177,7 +177,8 @@ function openTab(evt, tabName) {
 
 /* ============================================================
    05. 購物車側欄
-   - 點擊「加入購物車」→ 側欄滑出，商品加入清單
+   - navCartBtn 點擊由 cart.js 處理（開啟側欄或導向 cart.html）
+   - 加入購物車 → 側欄滑出，商品存入 CartManager（localStorage）
    - 支援數量增減、移除單項商品
    - 自動計算合計金額
    ============================================================ */
@@ -191,17 +192,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var cartFooter   = document.getElementById('cartFooter');
     var cartTotal    = document.getElementById('cartTotalPrice');
 
-    // 若本頁無購物車側欄（非產品頁），直接略過
+    // 若本頁無購物車側欄（非產品詳情頁），略過側欄邏輯
     if (!cartSidebar) return;
-
-    // 購物車資料（陣列）
-    var cartItems = [];
 
     /* --- 開啟 / 關閉側欄 --- */
     function openCart() {
         cartSidebar.classList.add('active');
         cartOverlay.classList.add('active');
-        document.body.classList.add('menu-open'); // 鎖定背景捲動
+        document.body.classList.add('menu-open');
     }
 
     function closeCart() {
@@ -213,26 +211,25 @@ document.addEventListener('DOMContentLoaded', function () {
     if (cartClose)   cartClose.addEventListener('click', closeCart);
     if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
-    /* --- 前往結帳：導向維護頁 --- */
+    /* --- 前往結帳 --- */
     var checkoutBtn = document.querySelector('.cart-checkout-btn');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', function () {
-            // 判斷目前頁面層級（products/ 子資料夾需往上一層）
             var path = window.location.pathname;
             var inSubfolder = path.indexOf('/products/') !== -1 ||
                               path.indexOf('/news/')     !== -1;
-            var target = inSubfolder
+            window.location.href = inSubfolder
                 ? '../checkout-maintenance.html'
                 : 'checkout-maintenance.html';
-            window.location.href = target;
         });
     }
 
     /* --- 重新渲染購物車列表 --- */
     function renderCart() {
+        var items = CartManager.getAll();
         cartItemList.innerHTML = '';
 
-        if (cartItems.length === 0) {
+        if (items.length === 0) {
             cartEmpty.style.display  = 'block';
             cartFooter.style.display = 'none';
             return;
@@ -243,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         var total = 0;
 
-        cartItems.forEach(function (item, index) {
+        items.forEach(function (item) {
             total += item.price * item.qty;
 
             var li = document.createElement('li');
@@ -254,12 +251,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     '<p class="cart-item-name">' + item.name + '</p>' +
                     '<p class="cart-item-price">NT$ ' + (item.price * item.qty).toLocaleString() + '</p>' +
                     '<div class="cart-item-qty">' +
-                        '<button class="cart-qty-btn" data-action="minus" data-index="' + index + '">－</button>' +
+                        '<button class="cart-qty-btn" data-action="minus" data-id="' + item.id + '">－</button>' +
                         '<span class="cart-qty-num">' + item.qty + '</span>' +
-                        '<button class="cart-qty-btn" data-action="plus" data-index="' + index + '">＋</button>' +
+                        '<button class="cart-qty-btn" data-action="plus" data-id="' + item.id + '">＋</button>' +
                     '</div>' +
                 '</div>' +
-                '<button class="cart-item-remove" data-index="' + index + '" aria-label="移除">' +
+                '<button class="cart-item-remove" data-id="' + item.id + '" aria-label="移除">' +
                     '<i class="fas fa-trash-alt"></i>' +
                 '</button>';
 
@@ -269,26 +266,29 @@ document.addEventListener('DOMContentLoaded', function () {
         cartTotal.textContent = 'NT$ ' + total.toLocaleString();
     }
 
+    /* --- 初始渲染（從 localStorage 恢復） --- */
+    renderCart();
+
     /* --- 數量增減 & 移除（事件委派） --- */
     cartItemList.addEventListener('click', function (e) {
         var qtyBtn    = e.target.closest('.cart-qty-btn');
         var removeBtn = e.target.closest('.cart-item-remove');
 
         if (qtyBtn) {
-            var idx    = parseInt(qtyBtn.getAttribute('data-index'));
+            var id     = qtyBtn.getAttribute('data-id');
             var action = qtyBtn.getAttribute('data-action');
-            if (action === 'plus') {
-                cartItems[idx].qty += 1;
-            } else if (action === 'minus') {
-                cartItems[idx].qty -= 1;
-                if (cartItems[idx].qty <= 0) cartItems.splice(idx, 1);
+            var items  = CartManager.getAll();
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].id === id) {
+                    CartManager.update(id, action === 'plus' ? items[i].qty + 1 : items[i].qty - 1);
+                    break;
+                }
             }
             renderCart();
         }
 
         if (removeBtn) {
-            var idx = parseInt(removeBtn.getAttribute('data-index'));
-            cartItems.splice(idx, 1);
+            CartManager.remove(removeBtn.getAttribute('data-id'));
             renderCart();
         }
     });
@@ -301,23 +301,14 @@ document.addEventListener('DOMContentLoaded', function () {
             var price = parseInt(this.getAttribute('data-price'));
             var img   = this.getAttribute('data-img');
 
-            // 取得數量輸入框的值
             var qtyInputId = this.getAttribute('data-qty-input');
             var qtyInput   = qtyInputId ? document.getElementById(qtyInputId) : null;
             var qty        = qtyInput ? Math.max(1, parseInt(qtyInput.value) || 1) : 1;
 
-            // 若已存在同商品，累加數量
-            var existing = cartItems.find(function (i) { return i.id === id; });
-            if (existing) {
-                existing.qty += qty;
-            } else {
-                cartItems.push({ id: id, name: name, price: price, img: img, qty: qty });
-            }
-
+            CartManager.add(id, name, price, img, qty);
             renderCart();
             openCart();
 
-            // 按鈕短暫變綠色提示成功
             var self = this;
             self.classList.add('added');
             setTimeout(function () { self.classList.remove('added'); }, 1000);
